@@ -1,40 +1,74 @@
 ---
-title: Welcome to Starlight
-description: Get started building your docs site with Starlight.
-template: splash # Remove or comment out this line to display the site sidebar on this page.
+title: Merge Queue Academy
+description: Learn how merge queues keep your main branch stable while enabling high-velocity development.
+template: splash
 hero:
-  tagline: Congrats on setting up a new Starlight project!
-  image:
-    file: ../../assets/houston.webp
+  tagline: Your main branch broke again. Two green PRs merged, and now CI is red. Learn how merge queues eliminate this problem forever.
   actions:
-    - text: Example Guide
-      link: /guides/example/
+    - text: What is a Merge Queue?
+      link: /introduction/what-is-a-merge-queue/
       icon: right-arrow
-    - text: Read the Starlight docs
-      link: https://starlight.astro.build
-      icon: external
+    - text: Do I Need One?
+      link: /decision/checklist/
+      icon: list-format
       variant: minimal
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
 
-## Next steps
+## The Problem
 
-<CardGrid stagger>
-	<Card title="Update content" icon="pencil">
-		Edit `src/content/docs/index.mdx` to see this page change.
-	</Card>
-	<Card title="Change page layout" icon="document">
-		Delete `template: splash` in `src/content/docs/index.mdx` to display a
-		sidebar on this page.
-	</Card>
-	<Card title="Add new content" icon="add-document">
-		Add Markdown or MDX files to `src/content/docs` to create new pages.
-	</Card>
-	<Card title="Configure your site" icon="setting">
-		Edit your `sidebar` and other config in `astro.config.mjs`.
-	</Card>
-	<Card title="Read the docs" icon="open-book">
-		Learn more in [the Starlight Docs](https://starlight.astro.build/).
-	</Card>
+Every team that scales hits the same wall: **pull requests that pass CI individually break main when merged together.**
+
+Manual solutions don't scale. "Just rebase before merging" becomes a full-time job. Branch protection helps but doesn't prevent semantic conflicts. The bigger your team gets, the worse it becomes.
+
+A merge queue is the systematic solution.
+
+---
+
+## Start Here
+
+<CardGrid>
+  <LinkCard
+    title="What is a Merge Queue?"
+    description="Understand the core concept and how it keeps main stable."
+    href="/introduction/what-is-a-merge-queue/"
+  />
+  <LinkCard
+    title="How Merge Queues Work"
+    description="The mechanics of queuing, testing, and merging."
+    href="/introduction/how-merge-queues-work/"
+  />
+</CardGrid>
+
+---
+
+## For Engineering Leaders
+
+<CardGrid>
+  <Card title="Should You Adopt One?" icon="approve-check-circle">
+    A practical checklist to determine if your team would benefit from a merge queue—and when it's overkill.
+  </Card>
+  <Card title="ROI & Value" icon="bars">
+    Quantify the cost of broken builds and the value of developer time saved.
+  </Card>
+  <Card title="Real-World Adoption" icon="seti:todo">
+    How high-performing engineering organizations use merge queues at scale.
+  </Card>
+</CardGrid>
+
+---
+
+## For Developers
+
+<CardGrid>
+  <Card title="Deep Dives" icon="magnifier">
+    Speculative merging, batching strategies, priority queues, and failure handling explained.
+  </Card>
+  <Card title="Use Cases" icon="puzzle">
+    Monorepos, trunk-based development, regulated industries, and high-velocity teams.
+  </Card>
+  <Card title="CI Optimization" icon="stopwatch">
+    How merge queues can reduce your CI bill while increasing throughput.
+  </Card>
 </CardGrid>

@@ -1,0 +1,12 @@
+/* Mermaid diagrams are rendered with a dark theme by default */
+/* Invert for light mode */
+:root:not([data-theme='dark']) svg[id^='mermaid'] {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+/* Make diagrams scale to container width */
+svg[id^='mermaid'] {
+  width: 100% !important;
+  max-width: none !important;
+  height: auto !important;
+}

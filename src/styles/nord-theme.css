@@ -1,0 +1,221 @@
+/* Nord Theme for Starlight */
+
+/* Nord Color Palette */
+:root {
+  /* Polar Night */
+  --nord0: #2E3440;
+  --nord1: #3B4252;
+  --nord2: #434C5E;
+  --nord3: #4C566A;
+  /* Snow Storm */
+  --nord4: #D8DEE9;
+  --nord5: #E5E9F0;
+  --nord6: #ECEFF4;
+  /* Frost */
+  --nord7: #8FBCBB;
+  --nord8: #88C0D0;
+  --nord9: #81A1C1;
+  --nord10: #5E81AC;
+  /* Aurora */
+  --nord11: #BF616A;
+  --nord12: #D08770;
+  --nord13: #EBCB8B;
+  --nord14: #A3BE8C;
+  --nord15: #B48EAD;
+}
+
+/* Dark mode (default for Nord) */
+:root[data-theme='dark'] {
+  --sl-color-accent-low: #3B4252;
+  --sl-color-accent: #88C0D0;
+  --sl-color-accent-high: #8FBCBB;
+
+  --sl-color-white: #ECEFF4;
+  --sl-color-gray-1: #D8DEE9;
+  --sl-color-gray-2: #a5b3c5;
+  --sl-color-gray-3: #7b8da1;
+  --sl-color-gray-4: #4C566A;
+  --sl-color-gray-5: #3B4252;
+  --sl-color-gray-6: #2E3440;
+  --sl-color-black: #242933;
+
+  --sl-color-bg: #2E3440;
+  --sl-color-bg-nav: #2E3440;
+  --sl-color-bg-sidebar: #2E3440;
+  --sl-color-hairline-light: #3B4252;
+  --sl-color-hairline: #434C5E;
+
+  --sl-color-text: #ECEFF4;
+  --sl-color-text-accent: #88C0D0;
+
+  /* Links */
+  --sl-color-text-link: #88C0D0;
+
+  /* Code */
+  --sl-color-bg-inline-code: #3B4252;
+
+  /* Badges and highlights */
+  --sl-color-green-low: #3B4252;
+  --sl-color-green: #A3BE8C;
+  --sl-color-green-high: #A3BE8C;
+}
+
+/* Light mode */
+:root:not([data-theme='dark']) {
+  --sl-color-accent-low: #D8DEE9;
+  --sl-color-accent: #5E81AC;
+  --sl-color-accent-high: #4C566A;
+
+  --sl-color-white: #2E3440;
+  --sl-color-gray-1: #3B4252;
+  --sl-color-gray-2: #434C5E;
+  --sl-color-gray-3: #4C566A;
+  --sl-color-gray-4: #a5b3c5;
+  --sl-color-gray-5: #D8DEE9;
+  --sl-color-gray-6: #ECEFF4;
+  --sl-color-black: #ECEFF4;
+
+  --sl-color-bg: #ECEFF4;
+  --sl-color-bg-nav: #E5E9F0;
+  --sl-color-bg-sidebar: #E5E9F0;
+  --sl-color-hairline-light: #D8DEE9;
+  --sl-color-hairline: #c9d1de;
+
+  --sl-color-text: #2E3440;
+  --sl-color-text-accent: #5E81AC;
+
+  /* Links */
+  --sl-color-text-link: #5E81AC;
+
+  /* Code */
+  --sl-color-bg-inline-code: #D8DEE9;
+
+  /* Badges and highlights */
+  --sl-color-green-low: #D8DEE9;
+  --sl-color-green: #A3BE8C;
+  --sl-color-green-high: #8aa67a;
+}
+
+/* Sidebar active item */
+:root[data-theme='dark'] [aria-current="page"] {
+  background-color: #3B4252 !important;
+  color: #88C0D0 !important;
+}
+
+:root:not([data-theme='dark']) [aria-current="page"] {
+  background-color: #D8DEE9 !important;
+  color: #5E81AC !important;
+}
+
+/* Hero section accent */
+.hero {
+  --sl-color-text-accent: var(--sl-color-accent);
+}
+
+/* Asides/Callouts - Dark mode */
+:root[data-theme='dark'] {
+  /* Note - Frost blue */
+  --sl-color-blue-low: #3B4252;
+  --sl-color-blue: #81A1C1;
+  --sl-color-blue-high: #88C0D0;
+
+  /* Tip - Aurora green */
+  --sl-color-green-low: #3B4252;
+  --sl-color-green: #A3BE8C;
+  --sl-color-green-high: #A3BE8C;
+
+  /* Caution - Aurora yellow */
+  --sl-color-orange-low: #3B4252;
+  --sl-color-orange: #EBCB8B;
+  --sl-color-orange-high: #EBCB8B;
+
+  /* Danger - Aurora red */
+  --sl-color-red-low: #3B4252;
+  --sl-color-red: #BF616A;
+  --sl-color-red-high: #BF616A;
+
+  /* Purple */
+  --sl-color-purple-low: #3B4252;
+  --sl-color-purple: #B48EAD;
+  --sl-color-purple-high: #B48EAD;
+}
+
+/* Asides/Callouts - Light mode */
+:root:not([data-theme='dark']) {
+  /* Note - Frost blue */
+  --sl-color-blue-low: #D8DEE9;
+  --sl-color-blue: #5E81AC;
+  --sl-color-blue-high: #4C566A;
+
+  /* Tip - Aurora green */
+  --sl-color-green-low: #D8DEE9;
+  --sl-color-green: #A3BE8C;
+  --sl-color-green-high: #8aa67a;
+
+  /* Caution - Aurora yellow */
+  --sl-color-orange-low: #D8DEE9;
+  --sl-color-orange: #D08770;
+  --sl-color-orange-high: #bf7963;
+
+  /* Danger - Aurora red */
+  --sl-color-red-low: #D8DEE9;
+  --sl-color-red: #BF616A;
+  --sl-color-red-high: #a8545c;
+
+  /* Purple */
+  --sl-color-purple-low: #D8DEE9;
+  --sl-color-purple: #B48EAD;
+  --sl-color-purple-high: #9c7a96;
+}
+
+/* Aside title and link overrides - Dark mode */
+:root[data-theme='dark'] .starlight-aside--tip {
+  --sl-color-asides-text-accent: #A3BE8C;
+}
+:root[data-theme='dark'] .starlight-aside--tip a {
+  color: #88C0D0;
+}
+:root[data-theme='dark'] .starlight-aside--note {
+  --sl-color-asides-text-accent: #81A1C1;
+}
+:root[data-theme='dark'] .starlight-aside--note a {
+  color: #88C0D0;
+}
+:root[data-theme='dark'] .starlight-aside--caution {
+  --sl-color-asides-text-accent: #EBCB8B;
+}
+:root[data-theme='dark'] .starlight-aside--caution a {
+  color: #88C0D0;
+}
+:root[data-theme='dark'] .starlight-aside--danger {
+  --sl-color-asides-text-accent: #BF616A;
+}
+:root[data-theme='dark'] .starlight-aside--danger a {
+  color: #88C0D0;
+}
+
+/* Aside title and link overrides - Light mode */
+:root:not([data-theme='dark']) .starlight-aside--tip {
+  --sl-color-asides-text-accent: #8aa67a;
+}
+:root:not([data-theme='dark']) .starlight-aside--tip a {
+  color: #5E81AC;
+}
+:root:not([data-theme='dark']) .starlight-aside--note {
+  --sl-color-asides-text-accent: #5E81AC;
+}
+:root:not([data-theme='dark']) .starlight-aside--note a {
+  color: #5E81AC;
+}
+:root:not([data-theme='dark']) .starlight-aside--caution {
+  --sl-color-asides-text-accent: #bf7963;
+}
+:root:not([data-theme='dark']) .starlight-aside--caution a {
+  color: #5E81AC;
+}
+:root:not([data-theme='dark']) .starlight-aside--danger {
+  --sl-color-asides-text-accent: #a8545c;
+}
+:root:not([data-theme='dark']) .starlight-aside--danger a {
+  color: #5E81AC;
+}
