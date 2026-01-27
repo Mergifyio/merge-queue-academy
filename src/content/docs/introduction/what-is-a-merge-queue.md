@@ -11,127 +11,17 @@ While the simplest merge queues just serialize merges, modern merge queues are s
 
 ## The Core Problem
 
-Without a merge queue, two developers can unknowingly break each other's code:
+Without a merge queue, two PRs can each pass CI individually, yet break main when combined. Each PR is tested against an outdated snapshot of main—not against each other.
 
-```mermaid
-sequenceDiagram
-    participant Alice
-    participant Bob
-    participant CI as CI System
-    participant Main as main branch
+This happens constantly: renamed modules, deleted functions, changed signatures, conflicting config changes. No merge conflict, but broken code.
 
-    Note over Main: main @ commit A
-
-    Alice->>CI: Open PR #1 (based on A)
-    Bob->>CI: Open PR #2 (based on A)
-
-    CI-->>Alice: ✅ PR #1 passes
-    CI-->>Bob: ✅ PR #2 passes
-
-    Alice->>Main: Merge PR #1
-    Note over Main: main @ commit B
-    Main->>CI: Run CI
-    CI-->>Main: ✅ Pass
-
-    Bob->>Main: Merge PR #2
-    Note over Main: main @ commit C
-    Main->>CI: Run CI
-    CI-->>Main: ❌ Fail!
-```
-
-Both PRs passed CI individually. But **PR #2 was never tested with PR #1's changes**. The combination is broken, and now main is red.
-
-### A Concrete Example
-
-Here's how this plays out in practice. Your codebase has a utility module:
-
-```python
-# utils.py
-def calculate_tax(amount):
-    return amount * 0.2
-```
-
-**Alice** is refactoring. She renames `utils.py` to `helpers.py` and updates all existing imports:
-
-```python
-# helpers.py (renamed from utils.py)
-def calculate_tax(amount):
-    return amount * 0.2
-```
-
-**Bob** is building a new feature. He adds code that imports from `utils`:
-
-```python
-# checkout.py (new file)
-from utils import calculate_tax
-
-def process_order(total):
-    tax = calculate_tax(total)
-    return total + tax
-```
-
-Both PRs pass CI:
-- Alice's PR: All tests pass—she updated every import
-- Bob's PR: All tests pass—`utils.py` still exists on his branch
-
-There's no merge conflict—they touched different files. Git happily merges both.
-
-But now `checkout.py` imports from `utils`, which no longer exists. **Main is broken.**
-
-```
-ModuleNotFoundError: No module named 'utils'
-```
-
-This isn't a rare edge case. It happens constantly with:
-- Renamed functions, classes, or modules
-- Deleted code that another PR depends on
-- Changed function signatures
-- Modified shared configuration
-
-### The Scale Problem
-
-This isn't theoretical. On active repositories:
-
-- A team merging **5 PRs/day** with 30-minute CI will have PRs go stale regularly
-- A team merging **20+ PRs/day** will see main break multiple times per week
-- Monorepos with **100+ daily merges** face near-constant instability without automation
-
-Manual solutions ("just rebase before merging") don't scale. They create bottlenecks, frustrate developers, and still fail under concurrent merges.
-
-## What a Merge Queue Does
-
-A merge queue tests each PR against its **actual merge target**—including all PRs ahead of it:
-
-```mermaid
-sequenceDiagram
-    participant Alice
-    participant Bob
-    participant MQ as Merge Queue
-    participant CI as CI System
-    participant Main as main branch
-
-    Note over Main: main @ commit A
-
-    Alice->>MQ: Add PR #1 to queue
-    Bob->>MQ: Add PR #2 to queue
-
-    MQ->>CI: Test PR #1 against A
-    CI-->>MQ: ✅ PR #1 passes
-
-    MQ->>Main: Merge PR #1
-    Note over Main: main @ commit B
-
-    MQ->>CI: Test PR #2 against B
-    Note over CI: PR #2 tested with PR #1's changes!
-    CI-->>MQ: ✅ PR #2 passes
-
-    MQ->>Main: Merge PR #2
-    Note over Main: main @ commit C ✅
-```
-
-The key insight: **test the PR against what main will look like after the merge, not what it looked like when the PR was created.**
+:::tip[Want the full breakdown?]
+See [What Happens Without a Merge Queue](/decision/failure-scenarios/) for detailed failure scenarios and their cascading costs.
+:::
 
 ## The Paradigm Shift: CI Before Merge, Not After
+
+A merge queue tests each PR against its **actual merge target**—including all PRs ahead of it. The key insight: **test the PR against what main will look like after the merge, not what it looked like when the PR was created.**
 
 Traditional workflows run final CI **after** merging to main:
 
@@ -190,10 +80,6 @@ This means:
 - **Failures are isolated** - only the PR author is affected, not the whole team
 
 This is the fundamental value of a merge queue: it makes "broken main" impossible by construction.
-
-:::tip[Want to learn more?]
-See [What Happens Without a Merge Queue](/decision/failure-scenarios/) for a detailed breakdown of the failure modes and their costs.
-:::
 
 ## Core Capabilities
 

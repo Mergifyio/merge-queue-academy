@@ -42,6 +42,49 @@ sequenceDiagram
 
 Both PRs were tested against M1 and passed. But Alice's changes (M2) and Bob's changes (M3) conflict in ways that neither CI run could detect. Now main is broken.
 
+### A Concrete Example
+
+Here's how this plays out in practice. Your codebase has a utility module:
+
+```python
+# utils.py
+def calculate_tax(amount):
+    return amount * 0.2
+```
+
+**Alice** is refactoring. She renames `utils.py` to `helpers.py` and updates all existing imports:
+
+```python
+# helpers.py (renamed from utils.py)
+def calculate_tax(amount):
+    return amount * 0.2
+```
+
+**Bob** is building a new feature. He adds code that imports from `utils`:
+
+```python
+# checkout.py (new file)
+from utils import calculate_tax
+
+def process_order(total):
+    tax = calculate_tax(total)
+    return total + tax
+```
+
+Both PRs pass CI:
+- Alice's PR: All tests pass—she updated every import
+- Bob's PR: All tests pass—`utils.py` still exists on his branch
+
+There's no merge conflict—they touched different files. Git happily merges both.
+
+But now `checkout.py` imports from `utils`, which no longer exists. **Main is broken.**
+
+```
+ModuleNotFoundError: No module named 'utils'
+```
+
+This pattern repeats with renamed functions, deleted code, changed signatures, and modified configuration. No merge conflict to warn you—just broken code on main.
+
 ## The Cascade Begins
 
 ### Stage 1: Discovery (Minutes to Hours)
