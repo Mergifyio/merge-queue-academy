@@ -52,14 +52,14 @@ The merge queue creates a **temporary branch** that represents "what main will l
 gitGraph
     commit id: "main"
     commit id: "A"
-    branch pr-123
-    commit id: "PR changes"
+    branch feature
+    commit id: "B"
     checkout main
-    branch mq/main/pr-123
-    merge pr-123 id: "test merge"
+    branch test
+    merge feature id: "merge"
 ```
 
-The test branch (`mq/main/pr-123`) contains:
+The test branch contains:
 - All commits from `main`
 - All commits from PRs ahead in the queue (if using [speculative merging](/features/speculative-merging/))
 - The PR's changes, merged in
