@@ -339,9 +339,37 @@ code:not(pre code) {
   margin: 1.5rem 0 !important;
 }
 
+/* Force brighter syntax highlighting - override at the span level */
+.expressive-code .ec-line .code span {
+  filter: saturate(1.2) brightness(1.15);
+}
+
 /* Ensure code text is readable */
 .expressive-code pre > code {
   color: var(--mqa-text) !important;
+}
+
+/* Syntax highlighting - override dark token colors
+   Using color directly with !important to override inline var(--0) */
+/* YAML keys, function names - teal */
+.expressive-code .ec-line span[style*="7FDBCA"] {
+  color: #a3f0e4 !important;
+}
+
+/* Quotes, punctuation - mint */
+.expressive-code .ec-line span[style*="D9F5DD"] {
+  color: #d9f5dd !important;
+}
+
+/* Comments - gray */
+.expressive-code .ec-line span[style*="919F9F"],
+.expressive-code .ec-line span[style*="637777"] {
+  color: #b0bfbf !important;
+}
+
+/* General text, colons, dashes */
+.expressive-code .ec-line span[style*="D6DEEB"] {
+  color: #e0e8f0 !important;
 }
 
 .expressive-code .frame {
