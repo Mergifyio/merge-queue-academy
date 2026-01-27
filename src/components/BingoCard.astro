@@ -29,8 +29,9 @@ while (gridItems.length < 16) {
     ))}
   </div>
   <div class="bingo-score">
-    <span class="score-count">0</span> / 16 checked
-    <span class="score-message"></span>
+    <div class="score-line"><span class="score-count">0</span> / 16 checked</div>
+    <div class="score-message"></div>
+    <div class="fireworks" id="fireworks"></div>
   </div>
 </div>
 
@@ -136,11 +137,14 @@ while (gridItems.length < 16) {
     color: var(--mqa-accent, #f59e0b);
   }
 
+  .score-line {
+    margin-bottom: 0.5rem;
+  }
+
   .score-message {
-    display: block;
-    margin-top: 0.5rem;
     font-family: var(--mqa-font-sans, 'Instrument Sans', sans-serif);
     font-size: 0.875rem;
+    min-height: 1.25rem;
   }
 
   .score-message.warning {
@@ -149,6 +153,31 @@ while (gridItems.length < 16) {
 
   .score-message.danger {
     color: var(--mqa-red, #f87171);
+  }
+
+  .fireworks {
+    position: relative;
+    height: 0;
+    overflow: visible;
+  }
+
+  .firework {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    animation: firework 0.8s ease-out forwards;
+  }
+
+  @keyframes firework {
+    0% {
+      transform: translate(0, 0) scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(var(--tx), var(--ty)) scale(0);
+      opacity: 0;
+    }
   }
 
   @media (max-width: 480px) {
@@ -172,6 +201,8 @@ while (gridItems.length < 16) {
     const cells = grid.querySelectorAll('.bingo-cell');
     const scoreCount = document.querySelector('.score-count');
     const scoreMessage = document.querySelector('.score-message');
+    const fireworksContainer = document.getElementById('fireworks');
+    let previousChecked = 0;
 
     cells.forEach(cell => {
       cell.addEventListener('click', () => {
@@ -180,9 +211,33 @@ while (gridItems.length < 16) {
       });
     });
 
+    function createFireworks() {
+      if (!fireworksContainer) return;
+      const colors = ['#f59e0b', '#fbbf24', '#fcd34d', '#fef3c7'];
+      for (let i = 0; i < 12; i++) {
+        const spark = document.createElement('div');
+        spark.className = 'firework';
+        spark.style.background = colors[Math.floor(Math.random() * colors.length)];
+        spark.style.left = '50%';
+        spark.style.top = '-10px';
+        const angle = (Math.PI * 2 * i) / 12;
+        const distance = 30 + Math.random() * 20;
+        spark.style.setProperty('--tx', `${Math.cos(angle) * distance}px`);
+        spark.style.setProperty('--ty', `${Math.sin(angle) * distance - 20}px`);
+        fireworksContainer.appendChild(spark);
+        setTimeout(() => spark.remove(), 800);
+      }
+    }
+
     function updateScore() {
       const checked = grid.querySelectorAll('.bingo-cell.checked').length;
       if (scoreCount) scoreCount.textContent = checked.toString();
+
+      // Trigger fireworks at thresholds
+      if ((checked === 4 || checked === 8 || checked === 12) && checked > previousChecked) {
+        createFireworks();
+      }
+      previousChecked = checked;
 
       if (scoreMessage) {
         scoreMessage.className = 'score-message';
@@ -194,8 +249,6 @@ while (gridItems.length < 16) {
           scoreMessage.classList.add('warning');
         } else if (checked >= 4) {
           scoreMessage.textContent = '💡 You might benefit from a merge queue';
-        } else if (checked > 0) {
-          scoreMessage.textContent = '';
         } else {
           scoreMessage.textContent = '';
         }
