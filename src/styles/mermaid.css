@@ -23,7 +23,7 @@ svg[id^='mermaid']:hover {
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
 }
 
-/* Text styling */
+/* Text styling - font is now set in mermaid config for proper background sizing */
 svg[id^='mermaid'] text {
   font-family: 'IBM Plex Mono', 'SF Mono', monospace !important;
 }
@@ -67,7 +67,9 @@ svg[id^='mermaid'] .section {
   stroke-width: 0;
 }
 
-/* Git graph */
-svg[id^='mermaid'] .commit-label {
-  font-size: 11px;
+/* Git graph backgrounds */
+svg[id^='mermaid'] .branchLabelBkg,
+svg[id^='mermaid'] .commit-label-bkg {
+  rx: 4px;
+  ry: 4px;
 }

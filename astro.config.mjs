@@ -13,8 +13,10 @@ export default defineConfig({
 					strategy: 'inline-svg',
 					mermaidConfig: {
 						theme: 'base',
+						fontFamily: 'IBM Plex Mono, SF Mono, monospace',
 						themeVariables: {
 							// Modern Editorial - warm dark theme
+							fontFamily: 'IBM Plex Mono, SF Mono, monospace',
 							// Backgrounds
 							background: '#13151a',
 							mainBkg: '#1a1d24',
