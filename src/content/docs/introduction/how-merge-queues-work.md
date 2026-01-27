@@ -226,14 +226,10 @@ The merge queue needs tight integration with your CI system.
 You configure which CI checks must pass before a PR can merge:
 
 ```yaml
-# Example configuration
 required_checks:
-  - "build"
-  - "test"
-  - "lint"
-
-optional_checks:
-  - "coverage"  # Can fail without blocking
+  - build
+  - test
+  - lint
 ```
 
 ### CI Triggers
