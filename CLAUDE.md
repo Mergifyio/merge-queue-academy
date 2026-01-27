@@ -12,6 +12,8 @@ npm run preview  # Preview production build locally
 
 **Critical:** Always run `npm run build` after editing content to verify no broken links or syntax errors.
 
+**Important:** Never start the dev server (`npm run dev`). Use `npm run build` to verify changes.
+
 ## Architecture
 
 This is an Astro documentation site using the Starlight theme.

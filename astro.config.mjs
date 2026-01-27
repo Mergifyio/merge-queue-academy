@@ -94,6 +94,9 @@ export default defineConfig({
 		starlight({
 			title: 'Merge Queue Academy',
 			social: [],
+			components: {
+				Header: './src/components/Header.astro',
+			},
 			customCss: ['./src/styles/custom-theme.css', './src/styles/mermaid.css'],
 			head: [
 				{

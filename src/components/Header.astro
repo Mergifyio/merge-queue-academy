@@ -1,0 +1,204 @@
+---
+import config from 'virtual:starlight/user-config';
+import LanguageSelect from 'virtual:starlight/components/LanguageSelect';
+import Search from 'virtual:starlight/components/Search';
+import SiteTitle from 'virtual:starlight/components/SiteTitle';
+import SocialIcons from 'virtual:starlight/components/SocialIcons';
+import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
+
+const shouldRenderSearch =
+  config.pagefind || config.components.Search !== '@astrojs/starlight/components/Search.astro';
+---
+
+<div class="header">
+  <div class="title-wrapper sl-flex">
+    <SiteTitle />
+  </div>
+  <div class="sl-flex print:hidden">
+    {shouldRenderSearch && <Search />}
+  </div>
+  <div class="sl-hidden md:sl-flex print:hidden right-group">
+    <div class="llm-buttons">
+      <button type="button" class="llm-btn" id="copy-for-llm" title="Copy page content as markdown">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+        </svg>
+        <span class="btn-label">Copy for LLM</span>
+      </button>
+      <a class="llm-btn" id="view-markdown" title="View page as markdown">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+        </svg>
+        <span class="btn-label">.md</span>
+      </a>
+    </div>
+    <div class="sl-flex social-icons">
+      <SocialIcons />
+    </div>
+    <ThemeSelect />
+    <LanguageSelect />
+  </div>
+</div>
+
+<style>
+  @layer starlight.core {
+    .header {
+      display: flex;
+      gap: var(--sl-nav-gap);
+      justify-content: space-between;
+      align-items: center;
+      height: 100%;
+    }
+
+    .title-wrapper {
+      overflow: clip;
+      padding: 0.25rem;
+      margin: -0.25rem;
+      min-width: 0;
+    }
+
+    .right-group,
+    .social-icons {
+      gap: 1rem;
+      align-items: center;
+    }
+    .social-icons::after {
+      content: '';
+      height: 2rem;
+      border-inline-end: 1px solid var(--sl-color-gray-5);
+    }
+
+    @media (min-width: 50rem) {
+      :global(:root[data-has-sidebar]) {
+        --__sidebar-pad: calc(2 * var(--sl-nav-pad-x));
+      }
+      :global(:root:not([data-has-toc])) {
+        --__toc-width: 0rem;
+      }
+      .header {
+        --__sidebar-width: max(0rem, var(--sl-content-inline-start, 0rem) - var(--sl-nav-pad-x));
+        --__main-column-fr: calc(
+          (
+              100% + var(--__sidebar-pad, 0rem) - var(--__toc-width, var(--sl-sidebar-width)) -
+                (2 * var(--__toc-width, var(--sl-nav-pad-x))) - var(--sl-content-inline-start, 0rem) -
+                var(--sl-content-width)
+            ) / 2
+        );
+        display: grid;
+        grid-template-columns:
+          minmax(
+            calc(var(--__sidebar-width) + max(0rem, var(--__main-column-fr) - var(--sl-nav-gap))),
+            auto
+          )
+          1fr
+          auto;
+        align-content: center;
+      }
+    }
+  }
+
+  /* LLM Buttons */
+  .llm-buttons {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-right: 0.5rem;
+    padding-right: 1rem;
+    border-right: 1px solid var(--sl-color-gray-5);
+  }
+
+  .llm-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.375rem 0.5rem;
+    font-family: var(--sl-font);
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--sl-color-gray-3);
+    background: transparent;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+
+  .llm-btn:hover {
+    color: var(--sl-color-white);
+    background: var(--sl-color-gray-6);
+    border-color: var(--sl-color-gray-4);
+  }
+
+  .llm-btn.copied {
+    color: #4ade80;
+    border-color: #4ade80;
+  }
+
+  .llm-btn svg {
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 72rem) {
+    .btn-label {
+      display: none;
+    }
+    .llm-btn {
+      padding: 0.375rem;
+    }
+    .llm-buttons {
+      gap: 0.375rem;
+    }
+  }
+</style>
+
+<script is:inline>
+  function initLLMButtons() {
+    const copyBtn = document.getElementById('copy-for-llm');
+    const viewBtn = document.getElementById('view-markdown');
+
+    // Set the markdown URL
+    const path = window.location.pathname.replace(/\/$/, '');
+    const mdUrl = path ? `${path}.md` : '/index.md';
+    if (viewBtn) {
+      viewBtn.href = mdUrl;
+    }
+
+    // Copy functionality
+    if (copyBtn && !copyBtn.dataset.initialized) {
+      copyBtn.dataset.initialized = 'true';
+      copyBtn.addEventListener('click', async () => {
+        try {
+          const response = await fetch(mdUrl);
+          if (!response.ok) throw new Error('Failed to fetch');
+          const markdown = await response.text();
+          await navigator.clipboard.writeText(markdown);
+
+          // Visual feedback
+          const labelEl = copyBtn.querySelector('.btn-label');
+          const originalText = labelEl?.textContent;
+          copyBtn.classList.add('copied');
+          if (labelEl) labelEl.textContent = 'Copied!';
+
+          setTimeout(() => {
+            copyBtn.classList.remove('copied');
+            if (labelEl && originalText) labelEl.textContent = originalText;
+          }, 2000);
+        } catch (err) {
+          console.error('Failed to copy:', err);
+        }
+      });
+    }
+  }
+
+  // Run on initial load
+  initLLMButtons();
+
+  // Re-run on Astro page transitions
+  document.addEventListener('astro:page-load', initLLMButtons);
+</script>
