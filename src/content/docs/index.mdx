@@ -3,14 +3,13 @@ title: Merge Queue Academy
 description: Learn how merge queues keep your main branch stable while enabling high-velocity development.
 template: splash
 hero:
-  tagline: Your main branch broke again. Two green PRs merged, and now CI is red. Learn how merge queues eliminate this problem forever.
+  tagline: "Your main branch broke again. Two green PRs merged, and now CI is red. Learn how merge queues eliminate this problem—permanently."
   actions:
-    - text: What is a Merge Queue?
+    - text: Start Learning
       link: /introduction/what-is-a-merge-queue/
       icon: right-arrow
     - text: Do I Need One?
-      link: /decision/checklist/
-      icon: list-format
+      link: /decision/failure-scenarios/
       variant: minimal
 ---
 
@@ -18,11 +17,13 @@ import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
 
 ## The Problem
 
-Every team that scales hits the same wall: **pull requests that pass CI individually break main when merged together.**
+Every engineering team that scales hits the same wall: **pull requests that pass CI individually break main when merged together.**
 
-Manual solutions don't scale. "Just rebase before merging" becomes a full-time job. Branch protection helps but doesn't prevent semantic conflicts. The bigger your team gets, the worse it becomes.
+This isn't a tooling problem—it's a fundamental race condition. Two developers can't know about each other's changes until after they've both merged. By then, it's too late.
 
-A merge queue is the systematic solution.
+Manual solutions don't scale. "Just rebase before merging" becomes a full-time job. Branch protection helps but doesn't prevent semantic conflicts. The bigger your team grows, the worse it gets.
+
+**A merge queue is the systematic solution.**
 
 ---
 
@@ -31,44 +32,75 @@ A merge queue is the systematic solution.
 <CardGrid>
   <LinkCard
     title="What is a Merge Queue?"
-    description="Understand the core concept and how it keeps main stable."
+    description="The core concept: testing PRs against their future merge target."
     href="/introduction/what-is-a-merge-queue/"
   />
   <LinkCard
     title="How Merge Queues Work"
-    description="The mechanics of queuing, testing, and merging."
+    description="Mechanics, lifecycle, and coordination with CI systems."
     href="/introduction/how-merge-queues-work/"
   />
 </CardGrid>
 
 ---
 
-## For Engineering Leaders
+## Features
 
 <CardGrid>
-  <Card title="Should You Adopt One?" icon="approve-check-circle">
-    A practical checklist to determine if your team would benefit from a merge queue—and when it's overkill.
+  <LinkCard
+    title="Two-Step CI"
+    description="Separate PR validation from queue validation."
+    href="/features/two-step-ci/"
+  />
+  <LinkCard
+    title="Batching"
+    description="Test multiple PRs together for efficiency."
+    href="/features/batching/"
+  />
+  <LinkCard
+    title="Speculative Merging"
+    description="Parallelize testing by assuming success."
+    href="/features/speculative-merging/"
+  />
+  <LinkCard
+    title="Parallel Queues"
+    description="Independent lanes for non-conflicting changes."
+    href="/features/parallel-queues/"
+  />
+</CardGrid>
+
+---
+
+## Use Cases
+
+<CardGrid>
+  <Card title="Monorepos" icon="seti:folder">
+    Many teams, independent components, complex dependency graphs. Merge queues with scopes let changes flow without blocking unrelated work.
   </Card>
-  <Card title="ROI & Value" icon="bars">
-    Quantify the cost of broken builds and the value of developer time saved.
+  <Card title="High-Velocity Teams" icon="rocket">
+    20+ PRs per day? Without a queue, you're playing merge roulette. With one, every commit on main is guaranteed tested.
   </Card>
-  <Card title="Real-World Adoption" icon="seti:todo">
-    How high-performing engineering organizations use merge queues at scale.
+  <Card title="Long CI Pipelines" icon="stopwatch">
+    30+ minute builds make rebasing painful. Batching and speculation turn that cost into an investment.
+  </Card>
+  <Card title="Regulated Industries" icon="approve-check-circle">
+    Audit trails, compliance requirements, and zero tolerance for broken builds. Merge queues provide the guarantees you need.
   </Card>
 </CardGrid>
 
 ---
 
-## For Developers
+## Get Started
 
 <CardGrid>
-  <Card title="Deep Dives" icon="magnifier">
-    Speculative merging, batching strategies, priority queues, and failure handling explained.
-  </Card>
-  <Card title="Use Cases" icon="puzzle">
-    Monorepos, trunk-based development, regulated industries, and high-velocity teams.
-  </Card>
-  <Card title="CI Optimization" icon="stopwatch">
-    How merge queues can reduce your CI bill while increasing throughput.
-  </Card>
+  <LinkCard
+    title="Do You Need One?"
+    description="Signs, prerequisites, and when to skip it."
+    href="/decision/failure-scenarios/"
+  />
+  <LinkCard
+    title="Tool Comparison"
+    description="GitHub MQ, Mergify, Aviator, Trunk, and more."
+    href="/real-world/tool-comparison/"
+  />
 </CardGrid>

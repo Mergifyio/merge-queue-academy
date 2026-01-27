@@ -1,12 +1,65 @@
-/* Mermaid diagrams are rendered with a dark theme by default */
-/* Invert for light mode */
-:root:not([data-theme='dark']) svg[id^='mermaid'] {
-  filter: invert(1) hue-rotate(180deg);
-}
+/* ==========================================================================
+   MERMAID DIAGRAM STYLES
+   Warm, readable styling matching the Modern Editorial theme
+   ========================================================================== */
 
-/* Make diagrams scale to container width */
+/* Container */
 svg[id^='mermaid'] {
   width: 100% !important;
   max-width: none !important;
   height: auto !important;
+  background: #1a1d24 !important;
+  border: 1px solid #272c37;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  display: block;
+  transition: border-color 0.2s ease;
+}
+
+svg[id^='mermaid']:hover {
+  border-color: #323846;
+}
+
+/* Text styling */
+svg[id^='mermaid'] text {
+  font-family: 'IBM Plex Mono', 'SF Mono', monospace !important;
+}
+
+/* Rounded nodes */
+svg[id^='mermaid'] .node rect {
+  rx: 6px !important;
+  ry: 6px !important;
+}
+
+svg[id^='mermaid'] .cluster rect {
+  rx: 8px !important;
+  ry: 8px !important;
+}
+
+/* State diagram */
+svg[id^='mermaid'] .statediagram-state rect {
+  rx: 6px !important;
+  ry: 6px !important;
+}
+
+/* Flowchart */
+svg[id^='mermaid'] .flowchart-link {
+  stroke-width: 1.5px;
+}
+
+/* Gantt */
+svg[id^='mermaid'] .task {
+  stroke-width: 0;
+  rx: 4px;
+  ry: 4px;
+}
+
+svg[id^='mermaid'] .section {
+  stroke-width: 0;
+}
+
+/* Git graph */
+svg[id^='mermaid'] .commit-label {
+  font-size: 11px;
 }
