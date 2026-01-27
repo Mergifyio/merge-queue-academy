@@ -1,6 +1,6 @@
 /* ==========================================================================
    MERMAID DIAGRAM STYLES
-   Warm, readable styling matching the Modern Editorial theme
+   Flow State theme - pipeline-inspired diagrams
    ========================================================================== */
 
 /* Container */
@@ -14,16 +14,24 @@ svg[id^='mermaid'] {
   padding: 1.5rem;
   margin: 1.5rem 0;
   display: block;
-  transition: border-color 0.2s ease;
+  transition: all 0.25s ease;
+  position: relative;
 }
 
 svg[id^='mermaid']:hover {
   border-color: #323846;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
 }
 
 /* Text styling */
 svg[id^='mermaid'] text {
   font-family: 'IBM Plex Mono', 'SF Mono', monospace !important;
+}
+
+/* Smaller note text */
+svg[id^='mermaid'] .note text,
+svg[id^='mermaid'] .noteText {
+  font-size: 12px !important;
 }
 
 /* Rounded nodes */

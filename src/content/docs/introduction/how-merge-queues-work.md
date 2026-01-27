@@ -26,7 +26,7 @@ stateDiagram-v2
 
 ### Stage 1: Entering the Queue
 
-When a PR is added to the merge queue (via label, command, or API), the queue:
+When a PR is added to the merge queue, the queue:
 
 1. **Validates eligibility** — Is the PR approved? Are required checks passing?
 2. **Assigns position** — Based on priority and arrival time
@@ -38,8 +38,7 @@ sequenceDiagram
     participant PR as Pull Request
     participant MQ as Merge Queue
 
-    Dev->>PR: Add "queue" label
-    PR->>MQ: Request to queue
+    Dev->>MQ: Add PR to queue
     MQ->>MQ: Check eligibility
     MQ->>MQ: Assign position #3
     MQ-->>PR: ✅ Queued at position #3

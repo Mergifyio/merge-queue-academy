@@ -13,10 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // Check if we're in light mode
-      const isLightMode = !document.documentElement.hasAttribute('data-theme') ||
-                          document.documentElement.getAttribute('data-theme') !== 'dark';
-
       // Create overlay container attached to body
       const overlay = document.createElement('div');
       overlay.id = 'mermaid-zoom-overlay';
@@ -43,11 +39,11 @@ document.addEventListener('DOMContentLoaded', () => {
         max-height: 95%;
         width: auto;
         height: auto;
-        background: ${isLightMode ? '#ECEFF4' : '#2E3440'};
-        border-radius: 8px;
-        padding: 1rem;
+        background: #1a1d24;
+        border: 1px solid #323846;
+        border-radius: 12px;
+        padding: 1.5rem;
         cursor: default;
-        filter: ${isLightMode ? 'invert(1) hue-rotate(180deg)' : 'none'};
       `;
 
       svgClone.addEventListener('click', (e) => e.stopPropagation());
