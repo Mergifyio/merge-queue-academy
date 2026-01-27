@@ -152,14 +152,14 @@ h2 {
 .sl-markdown-content h2::before {
   content: '';
   position: absolute;
-  left: -1.5rem;
+  left: -0.875rem;
   top: 50%;
   transform: translateY(-75%);
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   background: var(--mqa-accent);
   border-radius: 50%;
-  box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+  box-shadow: 0 0 6px rgba(245, 158, 11, 0.4);
 }
 
 h3 {
