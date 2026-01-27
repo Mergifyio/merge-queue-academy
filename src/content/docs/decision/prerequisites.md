@@ -13,9 +13,22 @@ Fix these issues first, or the merge queue will be more frustrating than helpful
 
 This is the most critical prerequisite. A flaky test is one that sometimes passes and sometimes fails for the same code.
 
+```mermaid
+flowchart TD
+    PR["PR enters queue"] --> CI1["CI runs"]
+    CI1 --> Flake{"Flaky test"}
+    Flake --> |"fails randomly"| Eject["❌ Ejected"]
+    Eject --> Requeue["Back of queue"]
+    Requeue --> Wait["⏳ Wait 30 min"]
+    Wait --> CI2["CI runs again"]
+    CI2 --> |"passes this time"| Merge["✅ Finally merged"]
+
+    Flake --> |"would have passed"| Lost["Time lost: 30-60 min"]
+```
+
 **The math is brutal:**
-- A 2% flake rate means 1 in 50 test runs fails randomly
-- With 20 PRs/day, you'll see ~1 random failure per day
+- A 5% flake rate means 1 in 20 test runs fails randomly
+- With 20 PRs/day, that's 1 false failure every single day
 - With batching, a flake fails the entire batch—ejecting innocent PRs
 
 **With a merge queue**, flaky tests cause:
@@ -24,9 +37,9 @@ This is the most critical prerequisite. A flaky test is one that sometimes passe
 - Lost trust in the system ("the queue is broken")
 - Wasted CI resources on retries
 
-### Target: <0.5% flake rate
+### Target: <2% flake rate
 
-Before adopting a merge queue, your test suite should have a flake rate under 0.5%. That means fewer than 1 in 200 runs fails randomly.
+Before adopting a merge queue, your test suite should have a flake rate under 2%. That means fewer than 1 in 50 runs fails randomly.
 
 ### How to measure
 
@@ -39,7 +52,7 @@ for i in {1..100}; do
 done | grep -c FAIL
 ```
 
-If you see more than 1 failure in 100 runs, you have work to do.
+If you see more than 2 failures in 100 runs, you have work to do.
 
 ### How to fix
 
@@ -51,7 +64,9 @@ If you see more than 1 failure in 100 runs, you have work to do.
 
 ## CI Reliability
 
-Your CI infrastructure must be stable. Merge queues add load and depend on consistent results.
+A merge queue trusts your CI completely. If CI says "pass," the PR merges. If CI says "fail," the PR is ejected. There's no human in the loop second-guessing the result.
+
+This means CI must give a reliable signal. When CI fails, it should mean the code is actually broken—not that a runner crashed or the network hiccuped.
 
 **Problems to fix:**
 - Runners that crash or timeout randomly
@@ -134,7 +149,7 @@ If you frequently hear "tests passed but the feature is broken," your test cover
 
 | Prerequisite | Target | How to Measure |
 |--------------|--------|----------------|
-| Flaky test rate | <0.5% | Run tests 100x on same commit |
+| Flaky test rate | <2% | Run tests 100x on same commit |
 | CI reliability | >99% | Track infra failures vs test failures |
 | CI duration | <20 min | Average pipeline run time |
 | Test coverage | Critical paths covered | Code review, coverage reports |
