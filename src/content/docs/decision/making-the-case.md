@@ -2,7 +2,7 @@
 title: Making the Case
 description: How to convince your team, manager, or leadership that you need a merge queue.
 sidebar:
-  order: 3
+  order: 5
 ---
 
 You know you need a merge queue. Now you need to convince others. This page gives you the talking points, data, and framing for different audiences.

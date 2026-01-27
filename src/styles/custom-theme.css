@@ -26,15 +26,21 @@
   --mqa-text-muted: #8891a5;
   --mqa-text-faint: #5c6478;
 
-  /* Primary accent - warm amber */
+  /* CI Status Colors - semantic */
+  --mqa-ci-pass: #4ade80;      /* Green - success, stable main, merged */
+  --mqa-ci-fail: #f87171;      /* Red - failure, broken main, rejected */
+  --mqa-ci-pending: #fbbf24;   /* Yellow - queued, testing, in progress */
+
+  /* Primary accent - amber (default/neutral) */
   --mqa-accent: #f59e0b;
   --mqa-accent-hover: #fbbf24;
   --mqa-accent-muted: #b45309;
 
-  /* Secondary accents */
+  /* Semantic aliases */
+  --mqa-green: var(--mqa-ci-pass);
+  --mqa-red: var(--mqa-ci-fail);
+  --mqa-yellow: var(--mqa-ci-pending);
   --mqa-blue: #60a5fa;
-  --mqa-green: #4ade80;
-  --mqa-red: #f87171;
   --mqa-purple: #c084fc;
 
   /* Fonts */
@@ -104,7 +110,7 @@ body {
   background: var(--mqa-bg);
 }
 
-/* Subtle gradient glow background */
+/* Subtle gradient glow background - CI colors */
 body::before {
   content: '';
   position: fixed;
@@ -112,7 +118,10 @@ body::before {
   left: 0;
   right: 0;
   height: 600px;
-  background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(245, 158, 11, 0.06), transparent);
+  background:
+    radial-gradient(ellipse 60% 40% at 20% -10%, rgba(74, 222, 128, 0.04), transparent),
+    radial-gradient(ellipse 50% 40% at 80% -10%, rgba(248, 113, 113, 0.04), transparent),
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(251, 191, 36, 0.06), transparent);
   pointer-events: none;
   z-index: -1;
 }
@@ -311,7 +320,7 @@ pre {
   position: relative;
 }
 
-/* Code block accent line */
+/* Code block accent line - CI colors */
 pre::before {
   content: '';
   position: absolute;
@@ -319,7 +328,7 @@ pre::before {
   top: 0;
   bottom: 0;
   width: 3px;
-  background: linear-gradient(180deg, var(--mqa-accent), var(--mqa-blue));
+  background: linear-gradient(180deg, var(--mqa-ci-pass), var(--mqa-ci-pending), var(--mqa-ci-fail));
   border-radius: var(--mqa-radius-lg) 0 0 var(--mqa-radius-lg);
 }
 
@@ -598,7 +607,7 @@ tr:hover td {
   position: relative;
 }
 
-/* Pipeline visualization behind hero */
+/* Pipeline visualization behind hero - CI colors */
 .hero::before {
   content: '';
   position: absolute;
@@ -608,9 +617,9 @@ tr:hover td {
   width: 600px;
   height: 600px;
   background:
-    radial-gradient(circle at 30% 30%, rgba(245, 158, 11, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 70% 70%, rgba(74, 222, 128, 0.05) 0%, transparent 40%),
-    radial-gradient(circle at 50% 50%, rgba(96, 165, 250, 0.04) 0%, transparent 60%);
+    radial-gradient(circle at 25% 35%, rgba(74, 222, 128, 0.1) 0%, transparent 45%),
+    radial-gradient(circle at 75% 35%, rgba(248, 113, 113, 0.08) 0%, transparent 45%),
+    radial-gradient(circle at 50% 65%, rgba(251, 191, 36, 0.1) 0%, transparent 50%);
   border-radius: 50%;
   filter: blur(60px);
   pointer-events: none;
@@ -827,8 +836,9 @@ blockquote {
 hr {
   border: none;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--mqa-border), transparent);
+  background: linear-gradient(90deg, transparent, var(--mqa-ci-pass), var(--mqa-ci-pending), var(--mqa-ci-fail), transparent);
   margin: 3rem 0;
+  opacity: 0.4;
 }
 
 /* --------------------------------------------------------------------------
@@ -981,9 +991,9 @@ main {
    SPECIAL COMPONENTS
    -------------------------------------------------------------------------- */
 
-/* Feature highlight box */
+/* Feature highlight box - CI colors */
 .feature-highlight {
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(96, 165, 250, 0.05) 100%);
+  background: linear-gradient(135deg, rgba(74, 222, 128, 0.06) 0%, rgba(251, 191, 36, 0.08) 50%, rgba(248, 113, 113, 0.06) 100%);
   border: 1px solid var(--mqa-border);
   border-radius: var(--mqa-radius-lg);
   padding: 1.5rem;
@@ -1047,4 +1057,91 @@ main {
 .queue-arrow {
   color: var(--mqa-text-faint);
   font-size: 1rem;
+}
+
+/* --------------------------------------------------------------------------
+   CI STATUS UTILITIES
+   Semantic colors for pass/fail/pending states in content
+   -------------------------------------------------------------------------- */
+
+/* Text colors */
+.ci-pass { color: var(--mqa-ci-pass); }
+.ci-fail { color: var(--mqa-ci-fail); }
+.ci-pending { color: var(--mqa-ci-pending); }
+
+/* Background colors (with appropriate text) */
+.ci-pass-bg {
+  background: rgba(74, 222, 128, 0.15);
+  color: var(--mqa-ci-pass);
+}
+.ci-fail-bg {
+  background: rgba(248, 113, 113, 0.15);
+  color: var(--mqa-ci-fail);
+}
+.ci-pending-bg {
+  background: rgba(251, 191, 36, 0.15);
+  color: var(--mqa-ci-pending);
+}
+
+/* Border colors */
+.ci-pass-border { border-color: var(--mqa-ci-pass); }
+.ci-fail-border { border-color: var(--mqa-ci-fail); }
+.ci-pending-border { border-color: var(--mqa-ci-pending); }
+
+/* CI Status badges - inline pills for status indicators */
+.ci-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 100px;
+  font-family: var(--mqa-font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.ci-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.ci-badge.pass {
+  background: rgba(74, 222, 128, 0.12);
+  color: var(--mqa-ci-pass);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+}
+.ci-badge.pass::before {
+  background: var(--mqa-ci-pass);
+  box-shadow: 0 0 6px rgba(74, 222, 128, 0.5);
+}
+
+.ci-badge.fail {
+  background: rgba(248, 113, 113, 0.12);
+  color: var(--mqa-ci-fail);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+}
+.ci-badge.fail::before {
+  background: var(--mqa-ci-fail);
+  box-shadow: 0 0 6px rgba(248, 113, 113, 0.5);
+}
+
+.ci-badge.pending {
+  background: rgba(251, 191, 36, 0.12);
+  color: var(--mqa-ci-pending);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+.ci-badge.pending::before {
+  background: var(--mqa-ci-pending);
+  box-shadow: 0 0 6px rgba(251, 191, 36, 0.5);
+}
+
+/* Animated pending badge */
+.ci-badge.pending.animated::before {
+  animation: pulse 2s infinite;
 }

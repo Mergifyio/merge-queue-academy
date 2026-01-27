@@ -2,10 +2,39 @@
 title: Do You Need a Merge Queue?
 description: A quick assessment to help you decide if a merge queue is right for your team.
 sidebar:
-  order: 4
+  order: 2
 ---
 
 import Quiz from '../../../components/Quiz.astro';
+import BingoCard from '../../../components/BingoCard.astro';
+
+How many of these have you experienced?
+
+<BingoCard
+  title="Merge Queue Bingo"
+  items={[
+    "Main broke this week",
+    "Rebased 3+ times for one PR",
+    "\"Who broke main?\" in Slack",
+    "Merge race with a coworker",
+    "CI passed, then main failed",
+    "Blocked deploy for hours",
+    "Reverted a reverted revert",
+    "Waited for CI twice to merge",
+    "PR approved but stale",
+    "Emergency hotfix blocked",
+    "Blamed the wrong PR",
+    "\"Just rebase and retry\"",
+    "Flaky test on main only",
+    "Merge queue is a spreadsheet",
+    "Friday deploy anxiety",
+    "Monday morning broken main",
+  ]}
+/>
+
+---
+
+## Take the Quiz
 
 Answer these 7 questions to find out if your team would benefit from a merge queue.
 
@@ -95,9 +124,33 @@ The pain is real. Broken main, rebasing loops, and coordination overhead are cos
 
 ---
 
-## What's Next?
+## The Signals
 
-Based on your situation:
+### Technical signals
+
+- **PR CI passes, post-merge CI fails** — The classic symptom. PRs test against stale main.
+- **CI takes 20+ minutes** — Long CI means stale branches and wasted re-runs.
+- **Frequent reverts** — "Revert 'Revert 'Add feature X''" is a red flag.
+- **Flaky tests appear on main but not PRs** — Integration issues only surface after merge.
+
+### Organizational signals
+
+- **Merge races** — Two devs refreshing GitHub, waiting to click merge first.
+- **Informal merge coordination** — Slack messages like "can I merge?" or "go ahead, I'll wait."
+- **Friday freeze** — Unwritten rule to avoid merging before the weekend.
+- **Blame games** — Time spent figuring out who broke main instead of fixing it.
+
+### Scale tipping points
+
+| Factor | Manageable | Painful | Critical |
+|--------|------------|---------|----------|
+| Team size | 5-10 engineers | 10-20 engineers | 20+ engineers |
+| Merge frequency | 5-10 PRs/day | 20+ PRs/day | 50+ PRs/day |
+| CI duration | 5-10 minutes | 20-30 minutes | 45+ minutes |
+
+---
+
+## What's Next?
 
 - **Need to convince others?** → [Making the Case](/decision/making-the-case/)
 - **Ready to choose a tool?** → [Tool Comparison](/real-world/tool-comparison/)

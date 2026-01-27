@@ -193,20 +193,24 @@ const { questions } = Astro.props;
   }
 
   .action-link {
+    display: inline-block;
     padding: 0.75rem 1.25rem;
-    background: var(--mqa-accent, #f59e0b);
+    background: var(--mqa-accent, #f59e0b) !important;
     border-radius: 6px;
-    color: #0a0b0d;
+    color: #0a0b0d !important;
     font-family: var(--mqa-font-display, 'Space Grotesk', sans-serif);
     font-size: 0.875rem;
     font-weight: 600;
-    text-decoration: none;
+    text-decoration: none !important;
     transition: all 0.2s ease;
+    border: none;
   }
 
   .action-link:hover {
-    background: var(--mqa-accent-hover, #fbbf24);
+    background: var(--mqa-accent-hover, #fbbf24) !important;
+    color: #0a0b0d !important;
     transform: translateY(-1px);
+    text-decoration: none !important;
   }
 </style>
 
