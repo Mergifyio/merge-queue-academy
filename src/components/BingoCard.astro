@@ -31,7 +31,6 @@ while (gridItems.length < 16) {
   <div class="bingo-score">
     <div class="score-line"><span class="score-count">0</span> / 16 checked</div>
     <div class="score-message"></div>
-    <div class="fireworks" id="fireworks"></div>
   </div>
 </div>
 
@@ -155,30 +154,6 @@ while (gridItems.length < 16) {
     color: var(--mqa-red, #f87171);
   }
 
-  .fireworks {
-    position: relative;
-    height: 0;
-    overflow: visible;
-  }
-
-  .firework {
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    animation: firework 0.8s ease-out forwards;
-  }
-
-  @keyframes firework {
-    0% {
-      transform: translate(0, 0) scale(1);
-      opacity: 1;
-    }
-    100% {
-      transform: translate(var(--tx), var(--ty)) scale(0);
-      opacity: 0;
-    }
-  }
 
   @media (max-width: 480px) {
     .bingo-grid {
@@ -193,66 +168,100 @@ while (gridItems.length < 16) {
   }
 </style>
 
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const grid = document.getElementById('bingo-grid');
-    if (!grid) return;
+<script is:inline>
+  (function() {
+    // Load confetti script
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js';
+    script.onload = function() {
+      window.confettiLoaded = true;
+    };
+    document.head.appendChild(script);
 
-    const cells = grid.querySelectorAll('.bingo-cell');
-    const scoreCount = document.querySelector('.score-count');
-    const scoreMessage = document.querySelector('.score-message');
-    const fireworksContainer = document.getElementById('fireworks');
-    let previousChecked = 0;
+    document.addEventListener('DOMContentLoaded', () => {
+      const grid = document.getElementById('bingo-grid');
+      if (!grid) return;
 
-    cells.forEach(cell => {
-      cell.addEventListener('click', () => {
-        cell.classList.toggle('checked');
-        updateScore();
+      const cells = grid.querySelectorAll('.bingo-cell');
+      const scoreCount = document.querySelector('.score-count');
+      const scoreMessage = document.querySelector('.score-message');
+      let previousChecked = 0;
+
+      cells.forEach(cell => {
+        cell.addEventListener('click', () => {
+          cell.classList.toggle('checked');
+          updateScore();
+        });
       });
-    });
 
-    function createFireworks() {
-      if (!fireworksContainer) return;
-      const colors = ['#f59e0b', '#fbbf24', '#fcd34d', '#fef3c7'];
-      for (let i = 0; i < 12; i++) {
-        const spark = document.createElement('div');
-        spark.className = 'firework';
-        spark.style.background = colors[Math.floor(Math.random() * colors.length)];
-        spark.style.left = '50%';
-        spark.style.top = '-10px';
-        const angle = (Math.PI * 2 * i) / 12;
-        const distance = 30 + Math.random() * 20;
-        spark.style.setProperty('--tx', `${Math.cos(angle) * distance}px`);
-        spark.style.setProperty('--ty', `${Math.sin(angle) * distance - 20}px`);
-        fireworksContainer.appendChild(spark);
-        setTimeout(() => spark.remove(), 800);
+      function fireConfetti() {
+        if (typeof confetti === 'undefined') return;
+
+        const scoreEl = document.querySelector('.bingo-score');
+        if (!scoreEl) return;
+
+        const rect = scoreEl.getBoundingClientRect();
+        const x = (rect.left + rect.width / 2) / window.innerWidth;
+        const y = rect.top / window.innerHeight;
+
+        // Fire multiple bursts for better visibility
+        confetti({
+          particleCount: 30,
+          spread: 50,
+          origin: { x, y },
+          colors: ['#f59e0b', '#fbbf24', '#fcd34d'],
+          startVelocity: 25,
+          ticks: 200
+        });
+
+        setTimeout(() => {
+          confetti({
+            particleCount: 20,
+            spread: 40,
+            origin: { x: x - 0.05, y },
+            colors: ['#f59e0b', '#fbbf24'],
+            startVelocity: 20,
+            ticks: 200
+          });
+        }, 100);
+
+        setTimeout(() => {
+          confetti({
+            particleCount: 20,
+            spread: 40,
+            origin: { x: x + 0.05, y },
+            colors: ['#fbbf24', '#fcd34d'],
+            startVelocity: 20,
+            ticks: 200
+          });
+        }, 200);
       }
-    }
 
-    function updateScore() {
-      const checked = grid.querySelectorAll('.bingo-cell.checked').length;
-      if (scoreCount) scoreCount.textContent = checked.toString();
+      function updateScore() {
+        const checked = grid.querySelectorAll('.bingo-cell.checked').length;
+        if (scoreCount) scoreCount.textContent = checked.toString();
 
-      // Trigger fireworks at thresholds
-      if ((checked === 4 || checked === 8 || checked === 12) && checked > previousChecked) {
-        createFireworks();
-      }
-      previousChecked = checked;
+        // Trigger confetti at thresholds
+        if ((checked === 4 || checked === 8 || checked === 12) && checked > previousChecked) {
+          fireConfetti();
+        }
+        previousChecked = checked;
 
-      if (scoreMessage) {
-        scoreMessage.className = 'score-message';
-        if (checked >= 12) {
-          scoreMessage.textContent = '🚨 You desperately need a merge queue';
-          scoreMessage.classList.add('danger');
-        } else if (checked >= 8) {
-          scoreMessage.textContent = '⚠️ A merge queue would help your team significantly';
-          scoreMessage.classList.add('warning');
-        } else if (checked >= 4) {
-          scoreMessage.textContent = '💡 You might benefit from a merge queue';
-        } else {
-          scoreMessage.textContent = '';
+        if (scoreMessage) {
+          scoreMessage.className = 'score-message';
+          if (checked >= 12) {
+            scoreMessage.textContent = '🚨 You desperately need a merge queue';
+            scoreMessage.classList.add('danger');
+          } else if (checked >= 8) {
+            scoreMessage.textContent = '⚠️ A merge queue would help your team significantly';
+            scoreMessage.classList.add('warning');
+          } else if (checked >= 4) {
+            scoreMessage.textContent = '💡 You might benefit from a merge queue';
+          } else {
+            scoreMessage.textContent = '';
+          }
         }
       }
-    }
-  });
+    });
+  })();
 </script>
