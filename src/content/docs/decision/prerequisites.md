@@ -89,37 +89,22 @@ CI failures should almost always be real test failures, not infrastructure probl
 
 ## CI Speed
 
-A merge queue processes PRs sequentially (or in batches). If your CI is slow, the queue becomes a bottleneck.
+CI speed matters because of the **feedback loop**. When a PR fails in the queue, the developer needs to know quickly so they can fix it and re-queue. A 45-minute CI means 45 minutes of waiting before learning something went wrong—then another 45 minutes after the fix.
 
-**The math:**
-- 30-minute CI can process ~2 PRs per hour
-- 20 PRs per day = 10 hours of queue time
-- PRs submitted at 4pm might not merge until tomorrow
+### Ideal: <20 minutes
 
-### Target: <20 minutes
+Under 20 minutes keeps the feedback loop tight. Developers can fix issues and re-queue within the same focus session.
 
-If your CI takes longer than 20 minutes:
-- Use **batching** to test multiple PRs together
-- Use **parallel queues** for independent parts of the codebase
-- Use **affected targets** to run only relevant tests
-- Optimize your slowest tests
+But not everyone can achieve this—and that's okay. If your CI is slower, merge queue features can help:
 
-### Throughput calculation
+- **[Batching](/features/batching/)** — Test multiple PRs together, amortizing CI time across the batch
+- **[Two-step CI](/features/two-step-ci/)** — Run fast checks on PRs, full suite only in the queue
+- **[Speculative merging](/features/speculative-merging/)** — Test PRs in parallel, assuming earlier ones will pass
+- **[Parallel queues](/features/parallel-queues/)** — Separate queues for independent parts of the codebase
 
-```
-PRs per hour = 60 / CI_duration_minutes
-PRs per 8-hour day = 8 × (60 / CI_duration_minutes)
-```
+### The real question
 
-| CI Duration | PRs/hour | PRs/day (8h) |
-|-------------|----------|--------------|
-| 10 min | 6 | 48 |
-| 20 min | 3 | 24 |
-| 30 min | 2 | 16 |
-| 45 min | 1.3 | 10 |
-| 60 min | 1 | 8 |
-
-If you merge more PRs than your queue can handle, you need faster CI or batching.
+Can your developers get feedback and iterate within a reasonable time? If a PR takes 3 CI cycles to merge (common for complex changes), that's 3× your CI duration in wait time. Make sure that's acceptable for your team.
 
 ---
 
@@ -151,7 +136,7 @@ If you frequently hear "tests passed but the feature is broken," your test cover
 |--------------|--------|----------------|
 | Flaky test rate | <2% | Run tests 100x on same commit |
 | CI reliability | >99% | Track infra failures vs test failures |
-| CI duration | <20 min | Average pipeline run time |
+| CI duration | <20 min ideal | Average pipeline run time |
 | Test coverage | Critical paths covered | Code review, coverage reports |
 
 ---
