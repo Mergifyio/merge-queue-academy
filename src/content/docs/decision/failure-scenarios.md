@@ -1,15 +1,15 @@
 ---
 title: What Happens Without a Merge Queue
-description: Understanding the failure modes and cascading costs of broken main branches.
+description: The failure modes and cascading costs of broken main branches.
 sidebar:
   order: 1
 ---
 
-When main breaks, it's not just one problem—it's a cascade of failures that compounds over time. This page breaks down exactly what happens and why the costs are higher than most teams realize.
+When main breaks, failures cascade. This page shows what happens and why the costs exceed what most teams expect.
 
 ## The Anatomy of a Broken Main
 
-Let's trace through a typical scenario. Two developers, Alice and Bob, are working on separate features.
+Two developers, Alice and Bob, work on separate features.
 
 ```mermaid
 sequenceDiagram
@@ -44,7 +44,7 @@ Both PRs were tested against M1 and passed. But Alice's changes (M2) and Bob's c
 
 ### A Concrete Example
 
-Here's how this plays out in practice. Your codebase has a utility module:
+Your codebase has a utility module:
 
 ```python
 # utils.py
@@ -111,7 +111,7 @@ While main is broken:
 
 ```mermaid
 flowchart LR
-    subgraph "Developers Trying to Work"
+    subgraph "Team Impact"
         D1[Dev 1: PR ready to merge] --> X1[❌ Blocked]
         D2[Dev 2: PR ready to merge] --> X2[❌ Blocked]
         D3[Dev 3: Starting new work] --> X3[⚠️ Based on broken code]
@@ -182,7 +182,7 @@ Every developer with an in-flight PR must:
 
 ### Stage 5: The Risk of Recurrence
 
-Here's the worst part: the same conditions that caused the original break still exist.
+The worst part: the same conditions that caused the break still exist.
 
 ```mermaid
 flowchart LR
@@ -205,7 +205,7 @@ Every time a developer is blocked, they have to:
 2. Investigate or wait
 3. Resume their original work (losing context)
 
-Studies show it takes **23 minutes** to fully regain focus after an interruption. A broken main creates interruptions for everyone.
+Studies show it takes **23 minutes** to regain focus after an interruption. A broken main interrupts everyone.
 
 ### Compound Delays
 
@@ -224,9 +224,9 @@ Teams that experience frequent broken mains develop defensive behaviors:
 - Slower release cycles
 - Reduced confidence in CI
 
-## How a Merge Queue Prevents All of This
+## How a Merge Queue Prevents This
 
-With a merge queue, the scenario plays out differently:
+With a merge queue:
 
 ```mermaid
 sequenceDiagram
@@ -254,7 +254,7 @@ sequenceDiagram
     Note over B: Only Bob needs to fix his PR
 ```
 
-The conflict is caught **before** either PR breaks main. Alice's changes land safely. Bob is notified to fix his PR. Main never breaks. No one else is affected.
+The queue catches the conflict **before** it breaks main. Alice's changes land. Bob gets notified. Main stays green. No one else is affected.
 
 ## Summary
 
@@ -267,4 +267,4 @@ The conflict is caught **before** either PR breaks main. Alice's changes land sa
 | Trust erodes over time | Confidence in main stays high |
 | Cycle can repeat | Problem is contained |
 
-The cost of a broken main is not just the time to fix it—it's the compound disruption across your entire team. A merge queue eliminates this entire category of problems.
+The cost of a broken main is not the time to fix it—it's the compound disruption across your team. A merge queue eliminates this class of problem.

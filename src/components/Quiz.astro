@@ -1,0 +1,312 @@
+---
+interface Question {
+  question: string;
+  options: { label: string; score: number }[];
+}
+
+interface Props {
+  questions: Question[];
+}
+
+const { questions } = Astro.props;
+---
+
+<div class="quiz-container" id="quiz-container">
+  <div class="quiz-progress">
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <span class="progress-text" id="progress-text">Question 1 of {questions.length}</span>
+  </div>
+
+  <div class="quiz-questions" id="quiz-questions">
+    {questions.map((q, qIndex) => (
+      <div class="question-card" data-question={qIndex} style={qIndex === 0 ? '' : 'display: none'}>
+        <h3 class="question-text">{q.question}</h3>
+        <div class="options">
+          {q.options.map((opt, oIndex) => (
+            <button
+              class="option-btn"
+              data-question={qIndex}
+              data-option={oIndex}
+              data-score={opt.score}
+              type="button"
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <div class="quiz-result" id="quiz-result" style="display: none">
+    <div class="result-icon" id="result-icon"></div>
+    <h3 class="result-title" id="result-title"></h3>
+    <p class="result-score" id="result-score"></p>
+    <p class="result-text" id="result-text"></p>
+    <div class="result-actions">
+      <button class="restart-btn" id="restart-btn" type="button">Take Again</button>
+      <a href="/decision/making-the-case/" class="action-link">Make the Case →</a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .quiz-container {
+    margin: 2rem 0;
+    padding: 2rem;
+    background: var(--mqa-bg-subtle, #1a1d24);
+    border: 1px solid var(--mqa-border-subtle, #272c37);
+    border-radius: 12px;
+    max-width: 640px;
+  }
+
+  .quiz-progress {
+    margin-bottom: 1.5rem;
+  }
+
+  .progress-bar {
+    height: 4px;
+    background: var(--mqa-bg-elevated, #282d38);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--mqa-accent, #f59e0b);
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+
+  .progress-text {
+    font-size: 0.75rem;
+    color: var(--mqa-text-muted, #8891a5);
+    font-family: var(--mqa-font-mono, 'IBM Plex Mono', monospace);
+  }
+
+  .question-card {
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-text {
+    font-family: var(--mqa-font-display, 'Space Grotesk', sans-serif);
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--mqa-text, #f0f2f5);
+    margin: 0 0 1.25rem 0;
+    line-height: 1.4;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+
+  .option-btn {
+    padding: 0.875rem 1rem;
+    background: var(--mqa-bg-muted, #21252e);
+    border: 2px solid var(--mqa-border, #323846);
+    border-radius: 8px;
+    color: var(--mqa-text-secondary, #b4bcd0);
+    font-family: var(--mqa-font-sans, 'Instrument Sans', sans-serif);
+    font-size: 0.9375rem;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .option-btn:hover {
+    border-color: var(--mqa-accent, #f59e0b);
+    background: var(--mqa-bg-elevated, #282d38);
+    color: var(--mqa-text, #f0f2f5);
+  }
+
+  .option-btn.selected {
+    border-color: var(--mqa-accent, #f59e0b);
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--mqa-text, #f0f2f5);
+  }
+
+  .quiz-result {
+    text-align: center;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .result-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .result-title {
+    font-family: var(--mqa-font-display, 'Space Grotesk', sans-serif);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--mqa-text, #f0f2f5);
+    margin: 0 0 0.5rem 0;
+  }
+
+  .result-score {
+    font-family: var(--mqa-font-mono, 'IBM Plex Mono', monospace);
+    font-size: 0.875rem;
+    color: var(--mqa-text-muted, #8891a5);
+    margin: 0 0 1rem 0;
+  }
+
+  .result-text {
+    font-size: 1rem;
+    color: var(--mqa-text-secondary, #b4bcd0);
+    line-height: 1.6;
+    margin: 0 0 1.5rem 0;
+  }
+
+  .result-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .restart-btn {
+    padding: 0.75rem 1.25rem;
+    background: var(--mqa-bg-muted, #21252e);
+    border: 1px solid var(--mqa-border, #323846);
+    border-radius: 6px;
+    color: var(--mqa-text-secondary, #b4bcd0);
+    font-family: var(--mqa-font-sans, 'Instrument Sans', sans-serif);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .restart-btn:hover {
+    border-color: var(--mqa-text-muted, #8891a5);
+    color: var(--mqa-text, #f0f2f5);
+  }
+
+  .action-link {
+    padding: 0.75rem 1.25rem;
+    background: var(--mqa-accent, #f59e0b);
+    border-radius: 6px;
+    color: #0a0b0d;
+    font-family: var(--mqa-font-display, 'Space Grotesk', sans-serif);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .action-link:hover {
+    background: var(--mqa-accent-hover, #fbbf24);
+    transform: translateY(-1px);
+  }
+</style>
+
+<script define:vars={{ questionCount: questions.length }}>
+  document.addEventListener('DOMContentLoaded', () => {
+    const container = document.getElementById('quiz-container');
+    if (!container) return;
+
+    const questionsEl = document.getElementById('quiz-questions');
+    const resultEl = document.getElementById('quiz-result');
+    const progressFill = document.getElementById('progress-fill');
+    const progressText = document.getElementById('progress-text');
+    const restartBtn = document.getElementById('restart-btn');
+
+    let currentQuestion = 0;
+    let totalScore = 0;
+    const answers = [];
+
+    const optionBtns = container.querySelectorAll('.option-btn');
+    optionBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const qIndex = parseInt(btn.dataset.question || '0');
+        const score = parseInt(btn.dataset.score || '0');
+
+        // Mark selected
+        const siblings = container.querySelectorAll(`.option-btn[data-question="${qIndex}"]`);
+        siblings.forEach(s => s.classList.remove('selected'));
+        btn.classList.add('selected');
+
+        // Store answer
+        answers[qIndex] = score;
+        totalScore = answers.reduce((a, b) => a + b, 0);
+
+        // Advance after delay
+        setTimeout(() => {
+          if (currentQuestion < questionCount - 1) {
+            currentQuestion++;
+            showQuestion(currentQuestion);
+          } else {
+            showResult();
+          }
+        }, 300);
+      });
+    });
+
+    function showQuestion(index) {
+      const cards = container.querySelectorAll('.question-card');
+      cards.forEach((card, i) => {
+        card.style.display = i === index ? 'block' : 'none';
+      });
+
+      const progress = ((index + 1) / questionCount) * 100;
+      if (progressFill) progressFill.style.width = progress + '%';
+      if (progressText) progressText.textContent = `Question ${index + 1} of ${questionCount}`;
+    }
+
+    function showResult() {
+      if (questionsEl) questionsEl.style.display = 'none';
+      if (resultEl) resultEl.style.display = 'block';
+      if (progressFill) progressFill.style.width = '100%';
+      if (progressText) progressText.textContent = 'Complete!';
+
+      const maxScore = questionCount * 3; // Assuming max 3 points per question
+      const percentage = Math.round((totalScore / maxScore) * 100);
+
+      const iconEl = document.getElementById('result-icon');
+      const titleEl = document.getElementById('result-title');
+      const scoreEl = document.getElementById('result-score');
+      const textEl = document.getElementById('result-text');
+
+      if (scoreEl) scoreEl.textContent = `Score: ${totalScore} / ${maxScore} (${percentage}%)`;
+
+      if (percentage >= 70) {
+        if (iconEl) iconEl.textContent = '🚨';
+        if (titleEl) titleEl.textContent = 'You Need a Merge Queue';
+        if (textEl) textEl.textContent = 'Your team is experiencing significant pain from merge conflicts and broken main. A merge queue would save hours every week and prevent incidents. The ROI is clear—time to make the case.';
+      } else if (percentage >= 40) {
+        if (iconEl) iconEl.textContent = '⚠️';
+        if (titleEl) titleEl.textContent = 'A Merge Queue Would Help';
+        if (textEl) textEl.textContent = 'You\'re feeling some friction, but it\'s manageable. As your team grows or merge frequency increases, these problems will compound. Consider adopting a merge queue before it becomes urgent.';
+      } else {
+        if (iconEl) iconEl.textContent = '✅';
+        if (titleEl) titleEl.textContent = 'You Might Be Fine (For Now)';
+        if (textEl) textEl.textContent = 'Your current workflow seems to be working. Keep an eye on the signals as you scale—what works for 5 engineers often breaks at 15. Revisit this assessment in 6 months.';
+      }
+    }
+
+    if (restartBtn) {
+      restartBtn.addEventListener('click', () => {
+        currentQuestion = 0;
+        totalScore = 0;
+        answers.length = 0;
+
+        optionBtns.forEach(btn => btn.classList.remove('selected'));
+
+        if (questionsEl) questionsEl.style.display = 'block';
+        if (resultEl) resultEl.style.display = 'none';
+
+        showQuestion(0);
+      });
+    }
+  });
+</script>

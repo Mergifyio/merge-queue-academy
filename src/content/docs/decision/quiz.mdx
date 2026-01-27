@@ -1,0 +1,104 @@
+---
+title: Do You Need a Merge Queue?
+description: A quick assessment to help you decide if a merge queue is right for your team.
+sidebar:
+  order: 4
+---
+
+import Quiz from '../../../components/Quiz.astro';
+
+Answer these 7 questions to find out if your team would benefit from a merge queue.
+
+<Quiz
+  questions={[
+    {
+      question: "How often does your main branch break (tests fail after merge)?",
+      options: [
+        { label: "Rarely or never", score: 0 },
+        { label: "A few times per month", score: 1 },
+        { label: "Weekly", score: 2 },
+        { label: "Multiple times per week", score: 3 }
+      ]
+    },
+    {
+      question: "How many pull requests merge to main per day (on average)?",
+      options: [
+        { label: "1-5 PRs", score: 0 },
+        { label: "5-15 PRs", score: 1 },
+        { label: "15-30 PRs", score: 2 },
+        { label: "30+ PRs", score: 3 }
+      ]
+    },
+    {
+      question: "How often do developers need to rebase before merging?",
+      options: [
+        { label: "Rarely", score: 0 },
+        { label: "Sometimes (25% of PRs)", score: 1 },
+        { label: "Often (50% of PRs)", score: 2 },
+        { label: "Almost always", score: 3 }
+      ]
+    },
+    {
+      question: "How long does your CI pipeline take?",
+      options: [
+        { label: "Under 10 minutes", score: 0 },
+        { label: "10-20 minutes", score: 1 },
+        { label: "20-45 minutes", score: 2 },
+        { label: "Over 45 minutes", score: 3 }
+      ]
+    },
+    {
+      question: "How many engineers contribute to the repository?",
+      options: [
+        { label: "1-5 engineers", score: 0 },
+        { label: "5-15 engineers", score: 1 },
+        { label: "15-30 engineers", score: 2 },
+        { label: "30+ engineers", score: 3 }
+      ]
+    },
+    {
+      question: "When main breaks, how long does it typically take to fix?",
+      options: [
+        { label: "N/A - main doesn't break", score: 0 },
+        { label: "Under 30 minutes", score: 1 },
+        { label: "30 minutes to 2 hours", score: 2 },
+        { label: "Over 2 hours", score: 3 }
+      ]
+    },
+    {
+      question: "How do developers coordinate merges today?",
+      options: [
+        { label: "No coordination needed - low traffic", score: 0 },
+        { label: "Informal Slack messages", score: 1 },
+        { label: "Merge races / first-come-first-served", score: 2 },
+        { label: "We have a spreadsheet or manual queue", score: 3 }
+      ]
+    }
+  ]}
+/>
+
+---
+
+## Understanding Your Score
+
+### 0-30%: You're Probably Fine
+
+Your workflow is working. Low merge frequency, fast CI, and stable main mean a merge queue might add unnecessary complexity. Revisit as your team grows.
+
+### 31-69%: Consider It
+
+You're experiencing some friction. A merge queue would smooth things out, but it's not urgent. Good time to evaluate options and plan for adoption.
+
+### 70-100%: You Need One
+
+The pain is real. Broken main, rebasing loops, and coordination overhead are costing your team significant time. A merge queue would pay for itself quickly.
+
+---
+
+## What's Next?
+
+Based on your situation:
+
+- **Need to convince others?** → [Making the Case](/decision/making-the-case/)
+- **Ready to choose a tool?** → [Tool Comparison](/real-world/tool-comparison/)
+- **Want to understand features?** → [How Merge Queues Work](/introduction/how-merge-queues-work/)

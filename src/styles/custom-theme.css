@@ -148,8 +148,8 @@ h2 {
   position: relative;
 }
 
-/* Pipeline stage indicator on h2 */
-h2::before {
+/* Pipeline stage indicator on h2 - scoped to content only */
+.sl-markdown-content h2::before {
   content: '';
   position: absolute;
   left: -1.5rem;
@@ -948,7 +948,7 @@ main {
     font-size: 1.25rem;
   }
 
-  h2::before {
+  .sl-markdown-content h2::before {
     display: none;
   }
 

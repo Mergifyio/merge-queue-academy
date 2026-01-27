@@ -1,13 +1,13 @@
 ---
 title: What is a Merge Queue?
-description: Understanding merge queues and how they keep your main branch stable while enabling high-velocity development.
+description: How merge queues keep your main branch stable while teams ship fast.
 sidebar:
   order: 1
 ---
 
-A merge queue is an automation layer that controls how pull requests get integrated into your main branch. It sits between "PR approved" and "PR merged," ensuring that changes are validated, optimized, and safely landed.
+A merge queue sits between "PR approved" and "PR merged." It validates changes before they land on main.
 
-While the simplest merge queues just serialize merges, modern merge queues are sophisticated systems that can **validate changes against future main state**, **batch PRs for efficiency**, **run dedicated CI pipelines**, and **parallelize testing across independent parts of your codebase**.
+Simple merge queues serialize merges. Modern ones do more: **test PRs against future main state**, **batch PRs together**, **run dedicated CI**, and **parallelize testing across independent code paths**.
 
 ## The Core Problem
 
@@ -72,38 +72,36 @@ flowchart TD
     style G fill:#D08770,stroke:#b87a65,color:#2E3440
 ```
 
-The queue CI tests the PR **as if it were already merged** with current main. If it passes, the merge is guaranteed safe. If it fails, the PR is rejected and **main is never touched**.
+The queue tests the PR **as if it were already merged** with current main. Pass? Merge succeeds. Fail? PR rejected, main untouched.
 
 This means:
-- **Main is always green** - broken code never lands
-- **Main is always deployable** - you can deploy with confidence at any time
-- **Failures are isolated** - only the PR author is affected, not the whole team
+- **Main stays green** — broken code never lands
+- **Deploy anytime** — main is always releasable
+- **Failures stay contained** — only the PR author fixes their code
 
-This is the fundamental value of a merge queue: it makes "broken main" impossible by construction.
+A merge queue makes "broken main" impossible by construction.
 
 ## Core Capabilities
 
-Modern merge queues provide several layers of value beyond basic serialization:
+Modern merge queues offer more than serialization:
 
 - **[Two-Step CI](/features/two-step-ci/)** — Separate PR validation from queue validation
-- **[Batching](/features/batching/)** — Test multiple PRs together for efficiency
+- **[Batching](/features/batching/)** — Test multiple PRs together
 - **[Speculative Merging](/features/speculative-merging/)** — Parallelize testing by assuming success
 - **[Parallel Queues](/features/parallel-queues/)** — Independent queues for non-conflicting changes
 - **[Freshness Policies](/features/freshness-policies/)** — Balance safety and throughput
-- **[Priority Management](/features/priority-management/)** — Urgent PRs can jump the queue
+- **[Priority Management](/features/priority-management/)** — Let urgent PRs jump the queue
 - **[Automatic Rollback](/features/automatic-rollback/)** — Revert on post-merge failure
-- **[Affected Targets](/features/affected-targets/)** — Selective testing with build graphs
-
-Explore each feature in detail in the [Features](/features/two-step-ci/) section.
+- **[Affected Targets](/features/affected-targets/)** — Test only what changed
 
 ## Summary
 
-A merge queue is more than "automated merging." It's a system that:
+A merge queue does more than automate merges. It:
 
-1. **Guarantees main branch stability** by testing PRs against their actual merge target
-2. **Shifts CI left** — validation happens before merge, not after
-3. **Maximizes throughput** through batching, speculation, and parallelism
-4. **Scales to large codebases** with scoped validation and selective testing
-5. **Handles real-world complexity** with priority management and rollback
+1. **Keeps main stable** by testing PRs against their actual merge target
+2. **Validates before merging** — CI runs before code lands, not after
+3. **Increases throughput** through batching, speculation, and parallelism
+4. **Scales to large codebases** with selective testing
+5. **Handles exceptions** with priority queues and automatic rollback
 
-The next section covers [how merge queues work](/introduction/how-merge-queues-work/) in more technical detail.
+Next: [How merge queues work](/introduction/how-merge-queues-work/) covers the mechanics.
