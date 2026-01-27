@@ -162,13 +162,12 @@ h2 {
   content: '';
   position: absolute;
   left: -0.875rem;
-  top: 50%;
-  transform: translateY(-75%);
+  top: 0.5em;
   width: 6px;
   height: 6px;
-  background: var(--mqa-accent);
+  background: var(--mqa-ci-pass);
   border-radius: 50%;
-  box-shadow: 0 0 6px rgba(245, 158, 11, 0.4);
+  box-shadow: 0 0 6px rgba(74, 222, 128, 0.4);
 }
 
 h3 {
