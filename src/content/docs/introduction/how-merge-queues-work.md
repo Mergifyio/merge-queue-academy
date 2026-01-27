@@ -214,7 +214,7 @@ gitGraph
 
 Only possible when the test branch is already based on current main. Moves the main pointer forward.
 
-**Pros:** No extra commits
+**Pros:** No extra commits, preserves exact SHA tested in queue
 **Cons:** Not always possible
 
 ## Coordination with CI
