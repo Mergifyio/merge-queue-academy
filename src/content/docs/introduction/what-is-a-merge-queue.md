@@ -91,7 +91,6 @@ Modern merge queues offer more than serialization:
 - **[Parallel Queues](/features/parallel-queues/)** — Independent queues for non-conflicting changes
 - **[Freshness Policies](/features/freshness-policies/)** — Balance safety and throughput
 - **[Priority Management](/features/priority-management/)** — Let urgent PRs jump the queue
-- **[Automatic Rollback](/features/automatic-rollback/)** — Revert on post-merge failure
 - **[Affected Targets](/features/affected-targets/)** — Test only what changed
 
 ## Summary
@@ -102,6 +101,6 @@ A merge queue does more than automate merges. It:
 2. **Validates before merging** — CI runs before code lands, not after
 3. **Increases throughput** through batching, speculation, and parallelism
 4. **Scales to large codebases** with selective testing
-5. **Handles exceptions** with priority queues and automatic rollback
+5. **Handles exceptions** with priority queues
 
 Next: [How merge queues work](/introduction/how-merge-queues-work/) covers the mechanics.

@@ -5,23 +5,15 @@ sidebar:
   order: 6
 ---
 
-Not all PRs are equally urgent. Merge queues support priority levels:
+Not all PRs are equally urgent. A critical security fix can jump ahead of routine changes:
 
 ```mermaid
 flowchart LR
-    subgraph Queue
-        direction TB
-        U[Urgent: Hotfix]
-        H[High: Feature deadline]
-        N1[Normal: Feature A]
-        N2[Normal: Feature B]
-        L[Low: Refactor]
-    end
-
-    Queue --> M[Merge Order]
+    U["🔴 Hotfix (urgent)"] --> Q["Queue"]
+    H["🟠 Feature (high)"] --> Q
+    N["🟢 Regular PR (normal)"] --> Q
+    Q --> Main["main"]
 ```
-
-A critical security fix can jump ahead of routine changes without completely disrupting the queue.
 
 ## Priority Levels
 
@@ -44,36 +36,25 @@ When a high-priority PR enters:
 
 ```mermaid
 sequenceDiagram
+    participant PR1 as 🟢 Normal PR
+    participant PR2 as 🔴 Urgent PR
     participant Q as Queue
-    participant PR1 as PR #1 (Normal)
-    participant PR2 as PR #2 (Urgent)
 
-    Note over Q: PR #1 is testing
-    PR2->>Q: Enter queue (Urgent)
-    Q->>PR1: Pause/requeue
-    Q->>PR2: Start testing immediately
-    PR2-->>Q: Tests pass
-    Q->>PR2: Merge
+    PR1->>Q: Enter queue
+    Note over Q: Testing PR1...
+    PR2->>Q: Enter queue
+    Q->>PR1: Paused
+    Q->>PR2: Testing
+    PR2-->>Q: Pass
+    Q->>PR2: Merged
     Q->>PR1: Resume testing
 ```
-
-## Negative Priority
-
-Some systems support **negative priority** to explicitly deprioritize certain PRs:
-
-- Large refactors that should merge during quiet periods
-- Dependency updates that can wait
-- Non-blocking improvements
-
-These PRs only merge when there's nothing else in the queue.
 
 ## Setting Priority
 
 Priority can be set via:
-- **Labels** - `priority:urgent`, `priority:low`
-- **Commands** - `/priority high`
-- **Rules** - Auto-assign based on files changed or PR author
-- **API** - Programmatic priority management
+- **Rules** — automatically based on labels, files changed, or PR author
+- **Commands** — manually via PR comments
 
 ## Best Practices
 

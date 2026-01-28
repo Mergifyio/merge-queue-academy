@@ -5,6 +5,7 @@ import rehypeMermaid from 'rehype-mermaid';
 
 // https://astro.build/config
 export default defineConfig({
+	site: 'https://merge-queue.academy',
 	markdown: {
 		rehypePlugins: [
 			[
