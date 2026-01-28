@@ -97,7 +97,7 @@ A team shipping 50 small PRs moves faster than one shipping 10 large PRs.
 
 ### Trunk-Based Development
 
-Most high-velocity teams practice [trunk-based development](/use-cases/trunk-based-development/):
+Most high-velocity teams practice trunk-based development:
 - Short-lived branches (hours, not days)
 - Frequent integration
 - Feature flags for incomplete work
