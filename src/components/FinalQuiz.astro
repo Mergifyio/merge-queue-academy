@@ -1,0 +1,1435 @@
+---
+// Final Quiz component - A fun, interactive 12-question knowledge test
+---
+
+<div class="final-quiz" id="final-quiz">
+  <div class="quiz-intro" id="quiz-intro">
+    <div class="intro-emoji">🎓</div>
+    <h2>Merge Queue Mastery Exam</h2>
+    <p>12 questions. No pressure. Okay, maybe a little pressure.</p>
+    <p class="intro-sub">Test your knowledge and earn your diploma!</p>
+
+    <div class="name-input-section">
+      <label for="candidate-name">Enter your name for the diploma:</label>
+      <input
+        type="text"
+        id="candidate-name"
+        placeholder="Your Name"
+        maxlength="40"
+        autocomplete="name"
+      />
+      <span class="name-privacy">Not stored anywhere — just for your diploma!</span>
+    </div>
+
+    <button class="start-btn" id="start-quiz" type="button">
+      🚀 Begin the Challenge
+    </button>
+  </div>
+
+  <div class="quiz-main" id="quiz-main" style="display: none">
+    <div class="quiz-header">
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <span class="progress-text" id="progress-text">Question 1 / 12</span>
+      </div>
+      <div class="score-display">
+        <span class="score-label">Score:</span>
+        <span class="score-value" id="current-score">0</span>
+      </div>
+    </div>
+
+    <div class="questions-container" id="questions-container">
+      <!-- Question 1: True/False -->
+      <div class="question-card" data-q="0">
+        <div class="q-type">🎯 True or False</div>
+        <h3>A merge queue tests your PR against the <em>current</em> state of main.</h3>
+        <div class="options tf-options">
+          <button class="option-btn" data-correct="false" type="button">
+            ✅ True
+          </button>
+          <button class="option-btn" data-correct="true" type="button">
+            ❌ False
+          </button>
+        </div>
+        <div class="explanation" style="display: none">
+          <strong>False!</strong> That's what regular CI does. A merge queue tests your PR against the <em>future</em> state of main—including all PRs ahead of you in the queue. That's the whole point! 🎯
+        </div>
+      </div>
+
+      <!-- Question 2: Multiple Choice -->
+      <div class="question-card" data-q="1" style="display: none">
+        <div class="q-type">🤔 Pick One</div>
+        <h3>Two PRs pass CI individually, but break main when merged together. This is called:</h3>
+        <div class="options">
+          <button class="option-btn" data-correct="false" type="button">
+            🐛 A regression bug
+          </button>
+          <button class="option-btn" data-correct="true" type="button">
+            💥 A semantic conflict
+          </button>
+          <button class="option-btn" data-correct="false" type="button">
+            🔀 A merge conflict
+          </button>
+          <button class="option-btn" data-correct="false" type="button">
+            🤷 Bad luck
+          </button>
+        </div>
+        <div class="explanation" style="display: none">
+          <strong>Semantic conflict!</strong> Merge conflicts are caught by git. Semantic conflicts are silent killers—code changes that are syntactically valid but logically incompatible. 💥
+        </div>
+      </div>
+
+      <!-- Question 3: Fill in the blank style -->
+      <div class="question-card" data-q="2" style="display: none">
+        <div class="q-type">📝 Complete the Sentence</div>
+        <h3>Speculative checks work by <span class="blank">______</span> that PRs ahead in the queue will pass.</h3>
+        <div class="options">
+          <button class="option-btn" data-correct="false" type="button">
+            🔮 Predicting
+          </button>
+          <button class="option-btn" data-correct="true" type="button">
+            🎲 Assuming
+          </button>
+          <button class="option-btn" data-correct="false" type="button">
+            🤞 Hoping
+          </button>
+          <button class="option-btn" data-correct="false" type="button">
+            ⏳ Waiting until
+          </button>
+        </div>
+        <div class="explanation" style="display: none">
+          <strong>Assuming!</strong> Speculative checks assume PRs ahead will pass and start testing yours in parallel. If that assumption is wrong, your test is invalidated and re-run. Optimism with a safety net! 🎲
+        </div>
+      </div>
+
+      <!-- Question 4: Scenario -->
+      <div class="question-card" data-q="3" style="display: none">
+        <div class="q-type">🎬 Scenario Time</div>
+        <h3>Your CI takes 30 minutes. You merge 20 PRs per day. Without batching, what's the queue's theoretical max throughput?</h3>
+        <div class="options">
+          <button class="option-btn" data-correct="false" type="button">
+            🐌 16 PRs/day
+          </button>
+          <button class="option-btn" data-correct="true" type="button">
+            🚶 48 PRs/day
+          </button>
+          <button class="option-btn" data-correct="false" type="button">
+            🏃 96 PRs/day
+          </button>
+          <button class="option-btn" data-correct="false" type="button">
+            🚀 Unlimited
+          </button>
+        </div>
+        <div class="explanation" style="display: none">
+          <strong>48 PRs/day!</strong> 24 hours × 60 minutes ÷ 30 minutes = 48. Your 20 PRs/day fits, but there's not much headroom. Batching or parallel queues would help! 🚶
+        </div>
+      </div>
+
+      <!-- Question 5: What happens -->
+      <div class="question-card" data-q="4" style="display: none">
+        <div class="q-type">⚡ What Happens Next?</div>
+        <h3>PR #2 fails in the queue. PR #3 was speculatively tested against [main + #1 + #2]. What happens to PR #3?</h3>
+        <div class="options">
+          <button class="option-btn" data-correct="false" type="button">
+            ✅ It merges (it passed!)
+          </button>
+          <button class="option-btn" data-correct="false" type="button">
+            ❌ It's removed from queue
+          </button>
+          <button class="option-btn" data-correct="true" type="button">
+            🔄 It's re-tested against [main + #1]
+          </button>
+          <button class="option-btn" data-correct="false" type="button">
+            ⏸️ It waits for #2 to be fixed
+          </button>
+        </div>
+        <div class="explanation" style="display: none">
+          <strong>Re-tested!</strong> PR #3's test is now invalid—it was tested in a world where #2 existed. The queue automatically re-tests #3 with a new base that excludes #2. 🔄
+        </div>
+      </div>
+
+      <!-- Question 6: True/False -->
+      <div class="question-card" data-q="5" style="display: none">
+        <div class="q-type">🎯 True or False</div>
+        <h3>Batching saves CI costs by testing multiple PRs with a single CI run.</h3>
+        <div class="options tf-options">
+          <button class="option-btn" data-correct="true" type="button">
+            ✅ True
+          </button>
+          <button class="option-btn" data-correct="false" type="button">
+            ❌ False
+          </button>
+        </div>
+        <div class="explanation" style="display: none">
+          <strong>True!</strong> If you batch 3 PRs together, you run CI once instead of thrice. That's 66% cost savings! The tradeoff: if the batch fails, you need to bisect to find the culprit. 💰
+        </div>
+      </div>
+
+      <!-- Question 7: Emoji Match -->
+      <div class="question-card" data-q="6" style="display: none">
+        <div class="q-type">🧩 Match the Feature</div>
+        <h3>Which feature lets frontend and backend PRs merge independently without blocking each other?</h3>
+        <div class="options">
+          <button class="option-btn" data-correct="false" type="button">
+            📦 Batching
+          </button>
+          <button class="option-btn" data-correct="false" type="button">
+            🎲 Speculative checks
+          </button>
+          <button class="option-btn" data-correct="true" type="button">
+            🛤️ Parallel queues
+          </button>
+          <button class="option-btn" data-correct="false" type="button">
+            🔢 Priority lanes
+          </button>
+        </div>
+        <div class="explanation" style="display: none">
+          <strong>Parallel queues!</strong> They let independent scopes (frontend, backend, docs) each have their own queue. Changes that don't affect each other don't wait for each other. 🛤️
+        </div>
+      </div>
+
+      <!-- Question 8: Order -->
+      <div class="question-card" data-q="7" style="display: none">
+        <div class="q-type">🏁 First Things First</div>
+        <h3>What should you fix BEFORE adopting a merge queue?</h3>
+        <div class="options">
+          <button class="option-btn" data-correct="true" type="button">
+            🎲 Flaky tests
+          </button>
+          <button class="option-btn" data-correct="false" type="button">
+            📝 PR templates
+          </button>
+          <button class="option-btn" data-correct="false" type="button">
+            🎨 Code style
+          </button>
+          <button class="option-btn" data-correct="false" type="button">
+            📊 Test coverage (more is better)
+          </button>
+        </div>
+        <div class="explanation" style="display: none">
+          <strong>Flaky tests!</strong> A 2% flake rate means 1 in 50 queue runs fails randomly. With batching, flakes eject innocent PRs. Fix flakes first—aim for &lt;0.5% flake rate. 🎲
+        </div>
+      </div>
+
+      <!-- Question 9: Company trivia -->
+      <div class="question-card" data-q="8" style="display: none">
+        <div class="q-type">🏢 Industry Knowledge</div>
+        <h3>Which company's merge queue (SubmitQueue) uses machine learning to predict change success?</h3>
+        <div class="options">
+          <button class="option-btn" data-correct="false" type="button">
+            🛒 Shopify
+          </button>
+          <button class="option-btn" data-correct="true" type="button">
+            🚗 Uber
+          </button>
+          <button class="option-btn" data-correct="false" type="button">
+            🐙 GitHub
+          </button>
+          <button class="option-btn" data-correct="false" type="button">
+            🔍 Google
+          </button>
+        </div>
+        <div class="explanation" style="display: none">
+          <strong>Uber!</strong> Their SubmitQueue uses ML to predict which changes are likely to pass, optimizing build scheduling. They went from 52% green to 99% green on their iOS mainline! 🚗
+        </div>
+      </div>
+
+      <!-- Question 10: Monorepo -->
+      <div class="question-card" data-q="9" style="display: none">
+        <div class="q-type">🏗️ Monorepo Mastery</div>
+        <h3>In a monorepo, a PR touches both /frontend and /backend. With parallel queues, how should it be handled?</h3>
+        <div class="options">
+          <button class="option-btn" data-correct="false" type="button">
+            🎲 Pick one queue randomly
+          </button>
+          <button class="option-btn" data-correct="true" type="button">
+            🔗 Union: enter both queues simultaneously
+          </button>
+          <button class="option-btn" data-correct="false" type="button">
+            ⛔ Reject cross-scope changes
+          </button>
+          <button class="option-btn" data-correct="false" type="button">
+            🌐 Use a global queue only
+          </button>
+        </div>
+        <div class="explanation" style="display: none">
+          <strong>Union strategy!</strong> The PR enters both queues and must pass in both before merging. This prevents a cross-scope change from breaking either scope while keeping queues mostly independent. 🔗
+        </div>
+      </div>
+
+      <!-- Question 11: Two-step CI -->
+      <div class="question-card" data-q="10" style="display: none">
+        <div class="q-type">🔄 Two-Step Thinking</div>
+        <h3>In two-step CI, what's the purpose of the first step (PR CI)?</h3>
+        <div class="options">
+          <button class="option-btn" data-correct="true" type="button">
+            ⚡ Fast feedback: lint, unit tests, build
+          </button>
+          <button class="option-btn" data-correct="false" type="button">
+            🔒 Security scanning only
+          </button>
+          <button class="option-btn" data-correct="false" type="button">
+            📊 Generate coverage reports
+          </button>
+          <button class="option-btn" data-correct="false" type="button">
+            🚀 Deploy to staging
+          </button>
+        </div>
+        <div class="explanation" style="display: none">
+          <strong>Fast feedback!</strong> Step 1 (PR CI) runs quick checks to give developers fast feedback. Step 2 (Queue CI) runs the full test suite against the real merge target. Speed + correctness! ⚡
+        </div>
+      </div>
+
+      <!-- Question 12: Final boss -->
+      <div class="question-card" data-q="11" style="display: none">
+        <div class="q-type">👑 Final Boss Question</div>
+        <h3>The "Not Rocket Science Rule" that inspired merge queues states:</h3>
+        <div class="options">
+          <button class="option-btn" data-correct="false" type="button">
+            🧪 Test everything twice
+          </button>
+          <button class="option-btn" data-correct="false" type="button">
+            🏃 Move fast and break things
+          </button>
+          <button class="option-btn" data-correct="true" type="button">
+            ✅ Automatically maintain a repository that always passes all tests
+          </button>
+          <button class="option-btn" data-correct="false" type="button">
+            📝 Document before you code
+          </button>
+        </div>
+        <div class="explanation" style="display: none">
+          <strong>Correct!</strong> Graydon Hoare (Rust's creator) coined this in 2013 when building Bors. It's not rocket science to keep main green—just test before you merge. Simple in principle, powerful in practice! 👑
+        </div>
+      </div>
+    </div>
+
+    <div class="question-footer">
+      <button class="next-btn" id="next-btn" type="button" disabled>
+        Next Question →
+      </button>
+    </div>
+  </div>
+
+  <div class="quiz-results" id="quiz-results" style="display: none">
+    <div class="diploma-wrapper">
+      <div class="diploma" id="diploma">
+        <div class="diploma-bg"></div>
+        <div class="diploma-content">
+          <div class="diploma-ornament top-left">❧</div>
+          <div class="diploma-ornament top-right">❧</div>
+
+          <div class="diploma-header-section">
+            <div class="diploma-icon">🎓</div>
+            <h2>Certificate of Achievement</h2>
+            <div class="diploma-divider">
+              <span class="divider-star">✦</span>
+            </div>
+          </div>
+
+          <div class="diploma-body">
+            <p class="diploma-subtitle">This is to certify that</p>
+            <div class="diploma-name" id="diploma-name">Distinguished Graduate</div>
+            <p class="diploma-text">has successfully demonstrated proficiency in</p>
+            <p class="diploma-subject">Merge Queue Engineering</p>
+
+            <div class="diploma-score-section">
+              <div class="score-badge">
+                <span class="score-number" id="final-score">0</span>
+                <span class="score-total">/12</span>
+              </div>
+              <div class="diploma-grade" id="diploma-grade">Merge Queue Master</div>
+            </div>
+          </div>
+
+          <div class="diploma-footer">
+            <div class="diploma-seal">
+              <span class="seal-emoji">🏆</span>
+              <span class="seal-text">CERTIFIED</span>
+            </div>
+            <div class="diploma-date" id="diploma-date"></div>
+            <div class="diploma-source">merge-queue.academy</div>
+          </div>
+
+          <div class="diploma-ornament bottom-left">❧</div>
+          <div class="diploma-ornament bottom-right">❧</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="share-section">
+      <p class="share-title">🎉 Share your achievement!</p>
+      <div class="share-buttons">
+        <button class="share-btn download" id="download-diploma" type="button">
+          📥 Download Diploma
+        </button>
+        <button class="share-btn twitter" id="share-twitter" type="button">
+          𝕏 Share on X
+        </button>
+        <button class="share-btn linkedin" id="share-linkedin" type="button">
+          in Share on LinkedIn
+        </button>
+      </div>
+      <div class="share-toast" id="share-toast"></div>
+    </div>
+
+    <div class="results-breakdown" id="results-breakdown">
+      <!-- Filled by JS -->
+    </div>
+
+    <div class="retry-section">
+      <button class="retry-btn" id="retry-btn" type="button">
+        🔄 Try Again
+      </button>
+      <a href="/" class="home-link">← Back to Academy</a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .final-quiz {
+    max-width: 700px;
+    margin: 2rem auto;
+  }
+
+  /* Intro */
+  .quiz-intro {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: var(--mqa-bg-subtle, #1a1d24);
+    border: 1px solid var(--mqa-border-subtle, #272c37);
+    border-radius: 16px;
+  }
+
+  .intro-emoji {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+  }
+
+  .quiz-intro h2 {
+    font-family: var(--mqa-font-display, 'Space Grotesk', sans-serif);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--mqa-text, #f0f2f5);
+    margin: 0 0 0.5rem 0;
+  }
+
+  .quiz-intro h2::before,
+  .diploma h2::before {
+    display: none !important;
+  }
+
+  .quiz-intro p {
+    color: var(--mqa-text-secondary, #b4bcd0);
+    font-size: 1.1rem;
+    margin: 0;
+  }
+
+  .intro-sub {
+    font-size: 0.95rem !important;
+    color: var(--mqa-text-muted, #8891a5) !important;
+    margin-top: 0.5rem !important;
+  }
+
+  .name-input-section {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .name-input-section label {
+    color: var(--mqa-text-secondary, #b4bcd0);
+    font-size: 0.9rem;
+  }
+
+  .name-input-section input {
+    width: 100%;
+    max-width: 300px;
+    padding: 0.875rem 1rem;
+    background: var(--mqa-bg-muted, #21252e);
+    border: 2px solid var(--mqa-border, #323846);
+    border-radius: 8px;
+    color: var(--mqa-text, #f0f2f5);
+    font-family: var(--mqa-font-display, 'Space Grotesk', sans-serif);
+    font-size: 1.1rem;
+    text-align: center;
+    transition: border-color 0.2s ease;
+  }
+
+  .name-input-section input:focus {
+    outline: none;
+    border-color: var(--mqa-accent, #f59e0b);
+  }
+
+  .name-input-section input::placeholder {
+    color: var(--mqa-text-muted, #8891a5);
+  }
+
+  .name-privacy {
+    font-size: 0.75rem;
+    color: var(--mqa-text-muted, #8891a5);
+    opacity: 0.8;
+  }
+
+  .start-btn {
+    margin-top: 1.5rem;
+    padding: 1rem 2.5rem;
+    background: var(--mqa-accent, #f59e0b);
+    border: none;
+    border-radius: 8px;
+    color: #0a0b0d;
+    font-family: var(--mqa-font-display, 'Space Grotesk', sans-serif);
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .start-btn:hover {
+    background: var(--mqa-accent-hover, #fbbf24);
+    transform: translateY(-2px);
+  }
+
+  /* Main Quiz */
+  .quiz-main {
+    background: var(--mqa-bg-subtle, #1a1d24);
+    border: 1px solid var(--mqa-border-subtle, #272c37);
+    border-radius: 16px;
+    padding: 1.5rem;
+  }
+
+  .quiz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .progress-container {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .progress-bar {
+    height: 6px;
+    background: var(--mqa-bg-elevated, #282d38);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--mqa-accent, #f59e0b), #fbbf24);
+    width: 8.33%;
+    transition: width 0.4s ease;
+  }
+
+  .progress-text {
+    font-family: var(--mqa-font-mono, 'IBM Plex Mono', monospace);
+    font-size: 0.8rem;
+    color: var(--mqa-text-muted, #8891a5);
+  }
+
+  .score-display {
+    background: var(--mqa-bg-elevated, #282d38);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-family: var(--mqa-font-mono, 'IBM Plex Mono', monospace);
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.25rem;
+    font-size: 0.85rem;
+  }
+
+  .score-label {
+    color: var(--mqa-text-muted, #8891a5);
+  }
+
+  .score-value {
+    color: var(--mqa-accent, #f59e0b);
+    font-weight: 600;
+  }
+
+  /* Question Cards */
+  .question-card {
+    animation: slideIn 0.4s ease;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .q-type {
+    font-family: var(--mqa-font-mono, 'IBM Plex Mono', monospace);
+    font-size: 0.75rem;
+    color: var(--mqa-accent, #f59e0b);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.75rem;
+  }
+
+  .question-card h3 {
+    font-family: var(--mqa-font-display, 'Space Grotesk', sans-serif);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--mqa-text, #f0f2f5);
+    margin: 0 0 1.5rem 0;
+    line-height: 1.5;
+  }
+
+  .question-card h3 em {
+    color: var(--mqa-accent, #f59e0b);
+    font-style: normal;
+  }
+
+  .blank {
+    display: inline-block;
+    min-width: 100px;
+    border-bottom: 2px dashed var(--mqa-accent, #f59e0b);
+    color: var(--mqa-accent, #f59e0b);
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .option-btn {
+    padding: 1rem 1.25rem;
+    background: var(--mqa-bg-muted, #21252e);
+    border: 2px solid var(--mqa-border, #323846);
+    border-radius: 10px;
+    color: var(--mqa-text-secondary, #b4bcd0);
+    font-family: var(--mqa-font-sans, 'Instrument Sans', sans-serif);
+    font-size: 1rem;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    box-sizing: border-box;
+    line-height: 1.2;
+  }
+
+  .tf-options {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    align-items: start;
+  }
+
+  .tf-options .option-btn {
+    justify-content: center;
+    height: 60px;
+    margin: 0;
+  }
+
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--mqa-accent, #f59e0b);
+    background: var(--mqa-bg-elevated, #282d38);
+    color: var(--mqa-text, #f0f2f5);
+    transform: translateX(4px);
+  }
+
+  .option-btn:disabled {
+    cursor: default;
+  }
+
+  .option-btn.correct {
+    border-color: #4ade80;
+    background: rgba(74, 222, 128, 0.15);
+    color: #4ade80;
+  }
+
+  .option-btn.incorrect {
+    border-color: #f87171;
+    background: rgba(248, 113, 113, 0.15);
+    color: #f87171;
+  }
+
+  .option-btn.correct::before {
+    content: "✓";
+    font-weight: bold;
+  }
+
+  .option-btn.incorrect::before {
+    content: "✗";
+    font-weight: bold;
+  }
+
+  .explanation {
+    margin-top: 1.5rem;
+    padding: 1rem 1.25rem;
+    background: var(--mqa-bg-elevated, #282d38);
+    border-left: 3px solid var(--mqa-accent, #f59e0b);
+    border-radius: 0 8px 8px 0;
+    color: var(--mqa-text-secondary, #b4bcd0);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .explanation strong {
+    color: var(--mqa-text, #f0f2f5);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .question-footer {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .next-btn {
+    padding: 0.875rem 1.5rem;
+    background: var(--mqa-accent, #f59e0b);
+    border: none;
+    border-radius: 8px;
+    color: #0a0b0d;
+    font-family: var(--mqa-font-display, 'Space Grotesk', sans-serif);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .next-btn:hover:not(:disabled) {
+    background: var(--mqa-accent-hover, #fbbf24);
+  }
+
+  .next-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  /* Results */
+  .quiz-results {
+    animation: fadeIn 0.5s ease;
+  }
+
+  /* Beautiful Diploma */
+  .diploma-wrapper {
+    margin-bottom: 2rem;
+  }
+
+  .diploma {
+    position: relative;
+    background: linear-gradient(145deg, #1a1d24 0%, #13151a 100%);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow:
+      0 0 0 4px #f59e0b,
+      0 0 0 6px #13151a,
+      0 0 0 8px #323846,
+      0 20px 40px rgba(0, 0, 0, 0.4);
+  }
+
+  .diploma-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(245, 158, 11, 0.08) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(251, 191, 36, 0.08) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .diploma-content {
+    position: relative;
+    padding: 2.5rem 2rem;
+    text-align: center;
+  }
+
+  .diploma-ornament {
+    position: absolute;
+    font-size: 1.5rem;
+    color: #f59e0b;
+    opacity: 0.6;
+  }
+
+  .diploma-ornament.top-left { top: 1rem; left: 1rem; transform: rotate(-45deg); }
+  .diploma-ornament.top-right { top: 1rem; right: 1rem; transform: rotate(45deg) scaleX(-1); }
+  .diploma-ornament.bottom-left { bottom: 1rem; left: 1rem; transform: rotate(45deg); }
+  .diploma-ornament.bottom-right { bottom: 1rem; right: 1rem; transform: rotate(-45deg) scaleX(-1); }
+
+  .diploma-header-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .diploma-icon {
+    font-size: 3.5rem;
+    margin-bottom: 0.5rem;
+    filter: drop-shadow(0 4px 8px rgba(245, 158, 11, 0.3));
+  }
+
+  .diploma h2 {
+    font-family: var(--mqa-font-display, 'Space Grotesk', sans-serif);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #f0f2f5;
+    margin: 0;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .diploma-divider {
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .diploma-divider::before,
+  .diploma-divider::after {
+    content: '';
+    flex: 1;
+    max-width: 100px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #f59e0b, transparent);
+  }
+
+  .divider-star {
+    color: #f59e0b;
+    font-size: 0.875rem;
+  }
+
+  .diploma-body {
+    margin: 1.5rem 0;
+  }
+
+  .diploma-subtitle {
+    color: #8891a5;
+    font-size: 0.875rem;
+    margin: 0 0 0.5rem 0;
+    font-style: italic;
+  }
+
+  .diploma-name {
+    font-family: var(--mqa-font-display, 'Space Grotesk', sans-serif);
+    font-size: 2rem;
+    font-weight: 700;
+    color: #f59e0b;
+    margin: 0.5rem 0;
+    text-shadow: 0 2px 10px rgba(245, 158, 11, 0.3);
+  }
+
+  .diploma-text {
+    color: #b4bcd0;
+    font-size: 0.875rem;
+    margin: 1rem 0 0.25rem 0;
+  }
+
+  .diploma-subject {
+    font-family: var(--mqa-font-display, 'Space Grotesk', sans-serif);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #f0f2f5;
+    margin: 0;
+  }
+
+  .diploma-score-section {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .score-badge {
+    display: inline-flex;
+    align-items: baseline;
+    padding: 0.5rem 1.5rem;
+    background: rgba(245, 158, 11, 0.15);
+    border: 2px solid #f59e0b;
+    border-radius: 30px;
+  }
+
+  .score-badge .score-number {
+    font-family: var(--mqa-font-mono, 'IBM Plex Mono', monospace);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #f0f2f5;
+  }
+
+  .score-badge .score-total {
+    font-family: var(--mqa-font-mono, 'IBM Plex Mono', monospace);
+    font-size: 1.25rem;
+    color: #8891a5;
+  }
+
+  .diploma-grade {
+    font-family: var(--mqa-font-display, 'Space Grotesk', sans-serif);
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 0.5rem 1.25rem;
+    background: #21252e;
+    border-radius: 20px;
+    border: 1px solid #323846;
+  }
+
+  .diploma-footer {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .diploma-seal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .seal-emoji {
+    font-size: 2rem;
+    filter: drop-shadow(0 2px 4px rgba(245, 158, 11, 0.4));
+  }
+
+  .seal-text {
+    font-family: var(--mqa-font-mono, 'IBM Plex Mono', monospace);
+    font-size: 0.625rem;
+    font-weight: 600;
+    color: #f59e0b;
+    letter-spacing: 0.2em;
+  }
+
+  .diploma-date {
+    font-family: var(--mqa-font-mono, 'IBM Plex Mono', monospace);
+    font-size: 0.75rem;
+    color: #8891a5;
+  }
+
+  .diploma-source {
+    font-family: var(--mqa-font-mono, 'IBM Plex Mono', monospace);
+    font-size: 0.7rem;
+    color: #5c6478;
+  }
+
+  /* Share section */
+  .share-section {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: var(--mqa-bg-subtle, #1a1d24);
+    border: 1px solid var(--mqa-border-subtle, #272c37);
+    border-radius: 12px;
+  }
+
+  .share-title {
+    color: var(--mqa-text, #f0f2f5);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 1.25rem 0;
+  }
+
+  .share-buttons {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    align-items: stretch;
+    flex-wrap: wrap;
+  }
+
+  .share-btn {
+    padding: 0.875rem 1.5rem;
+    border-radius: 8px;
+    height: 52px;
+    box-sizing: border-box;
+    font-family: var(--mqa-font-sans, 'Instrument Sans', sans-serif);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .share-btn.download {
+    background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+    color: #0a0b0d;
+    border: 1px solid transparent;
+  }
+
+  .share-btn.download:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+  }
+
+  .share-btn.twitter {
+    background: #000;
+    color: #fff;
+    border: 1px solid #333;
+  }
+
+  .share-btn.twitter:hover {
+    background: #1a1a1a;
+  }
+
+  .share-btn.linkedin {
+    background: #0077b5;
+    color: #fff;
+    border: 1px solid transparent;
+  }
+
+  .share-btn.linkedin:hover {
+    background: #006097;
+  }
+
+  .share-toast {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: #4ade80;
+    min-height: 1.25rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .share-toast.show {
+    opacity: 1;
+  }
+
+  /* Results breakdown */
+  .results-breakdown {
+    background: var(--mqa-bg-subtle, #1a1d24);
+    border: 1px solid var(--mqa-border-subtle, #272c37);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .breakdown-title {
+    font-family: var(--mqa-font-display, 'Space Grotesk', sans-serif);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--mqa-text, #f0f2f5);
+    margin: 0 0 1rem 0;
+  }
+
+  .breakdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--mqa-border-subtle, #272c37);
+    font-size: 0.9rem;
+  }
+
+  .breakdown-item:last-child {
+    border-bottom: none;
+  }
+
+  .breakdown-icon {
+    font-size: 1rem;
+  }
+
+  .breakdown-text {
+    flex: 1;
+    color: var(--mqa-text-secondary, #b4bcd0);
+  }
+
+  /* Retry section */
+  .retry-section {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .retry-btn {
+    padding: 0.875rem 1.5rem;
+    background: var(--mqa-bg-muted, #21252e);
+    border: 1px solid var(--mqa-border, #323846);
+    border-radius: 8px;
+    color: var(--mqa-text-secondary, #b4bcd0);
+    font-family: var(--mqa-font-sans, 'Instrument Sans', sans-serif);
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .retry-btn:hover {
+    border-color: var(--mqa-text-muted, #8891a5);
+    color: var(--mqa-text, #f0f2f5);
+  }
+
+  .home-link {
+    color: var(--mqa-text-muted, #8891a5) !important;
+    font-size: 0.9rem;
+    text-decoration: none !important;
+    transition: color 0.2s ease;
+  }
+
+  .home-link:hover {
+    color: var(--mqa-text, #f0f2f5) !important;
+  }
+
+  @media (max-width: 600px) {
+    .quiz-intro {
+      padding: 2rem 1.5rem;
+    }
+
+    .quiz-intro h2 {
+      font-size: 1.5rem;
+    }
+
+    .diploma-content {
+      padding: 2rem 1.5rem;
+    }
+
+    .diploma h2 {
+      font-size: 1.25rem;
+    }
+
+    .diploma-name {
+      font-size: 1.5rem;
+    }
+
+    .score-badge .score-number {
+      font-size: 2rem;
+    }
+
+    .tf-options {
+      grid-template-columns: 1fr;
+    }
+
+    .share-buttons {
+      flex-direction: column;
+    }
+
+    .share-btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Load libraries
+    const confettiScript = document.createElement('script');
+    confettiScript.src = 'https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js';
+    document.head.appendChild(confettiScript);
+
+    const html2canvasScript = document.createElement('script');
+    html2canvasScript.src = 'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js';
+    document.head.appendChild(html2canvasScript);
+
+    const intro = document.getElementById('quiz-intro');
+    const main = document.getElementById('quiz-main');
+    const results = document.getElementById('quiz-results');
+    const startBtn = document.getElementById('start-quiz');
+    const nextBtn = document.getElementById('next-btn');
+    const retryBtn = document.getElementById('retry-btn');
+    const nameInput = document.getElementById('candidate-name') as HTMLInputElement;
+
+    const progressFill = document.getElementById('progress-fill');
+    const progressText = document.getElementById('progress-text');
+    const currentScoreEl = document.getElementById('current-score');
+
+    const questions = document.querySelectorAll('.question-card');
+    const totalQuestions = questions.length;
+
+    let currentQ = 0;
+    let score = 0;
+    let answers: boolean[] = [];
+    let candidateName = '';
+
+    // Load saved name from localStorage
+    const savedName = localStorage.getItem('mqa-quiz-name');
+    if (savedName && nameInput) {
+      nameInput.value = savedName;
+    }
+
+    // Start quiz
+    startBtn?.addEventListener('click', () => {
+      candidateName = nameInput?.value.trim() || 'Distinguished Graduate';
+      // Save name to localStorage
+      if (nameInput?.value.trim()) {
+        localStorage.setItem('mqa-quiz-name', nameInput.value.trim());
+      }
+      if (intro) intro.style.display = 'none';
+      if (main) main.style.display = 'block';
+    });
+
+    // Handle option clicks
+    questions.forEach((card, qIndex) => {
+      const options = card.querySelectorAll('.option-btn');
+      options.forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (btn.classList.contains('correct') || btn.classList.contains('incorrect')) {
+            return;
+          }
+
+          const isCorrect = btn.getAttribute('data-correct') === 'true';
+          answers[qIndex] = isCorrect;
+
+          options.forEach(o => {
+            (o as HTMLButtonElement).disabled = true;
+            if (o.getAttribute('data-correct') === 'true') {
+              o.classList.add('correct');
+            }
+          });
+
+          if (!isCorrect) {
+            btn.classList.add('incorrect');
+          } else {
+            score++;
+            if (currentScoreEl) currentScoreEl.textContent = score.toString();
+          }
+
+          const explanation = card.querySelector('.explanation') as HTMLElement;
+          if (explanation) explanation.style.display = 'block';
+
+          if (nextBtn) (nextBtn as HTMLButtonElement).disabled = false;
+        });
+      });
+    });
+
+    // Next question
+    nextBtn?.addEventListener('click', () => {
+      if (currentQ < totalQuestions - 1) {
+        questions[currentQ].style.display = 'none';
+        currentQ++;
+        questions[currentQ].style.display = 'block';
+
+        const progress = ((currentQ + 1) / totalQuestions) * 100;
+        if (progressFill) progressFill.style.width = progress + '%';
+        if (progressText) progressText.textContent = `Question ${currentQ + 1} / ${totalQuestions}`;
+
+        (nextBtn as HTMLButtonElement).disabled = true;
+
+        if (currentQ === totalQuestions - 1) {
+          nextBtn.textContent = '🎓 See Results';
+        }
+      } else {
+        showResults();
+      }
+    });
+
+    function showResults() {
+      if (main) main.style.display = 'none';
+      if (results) results.style.display = 'block';
+
+      // Update name
+      const nameEl = document.getElementById('diploma-name');
+      if (nameEl) nameEl.textContent = candidateName;
+
+      // Update score
+      const finalScoreEl = document.getElementById('final-score');
+      if (finalScoreEl) finalScoreEl.textContent = score.toString();
+
+      // Update grade
+      const gradeEl = document.getElementById('diploma-grade');
+      let grade = '';
+      let gradeColor = '';
+
+      if (score === 12) {
+        grade = '🏆 Merge Queue Master';
+        gradeColor = '#fbbf24';
+        fireConfetti();
+      } else if (score >= 10) {
+        grade = '🥇 Queue Commander';
+        gradeColor = '#4ade80';
+        fireConfetti();
+      } else if (score >= 8) {
+        grade = '🥈 Branch Protector';
+        gradeColor = '#60a5fa';
+      } else if (score >= 6) {
+        grade = '🥉 CI Apprentice';
+        gradeColor = '#c084fc';
+      } else if (score >= 4) {
+        grade = '📚 Eager Learner';
+        gradeColor = '#f87171';
+      } else {
+        grade = '🌱 Fresh Start';
+        gradeColor = '#8891a5';
+      }
+
+      if (gradeEl) {
+        gradeEl.textContent = grade;
+        gradeEl.style.color = gradeColor;
+      }
+
+      // Update date
+      const dateEl = document.getElementById('diploma-date');
+      if (dateEl) {
+        const now = new Date();
+        dateEl.textContent = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+      }
+
+      // Build breakdown
+      const breakdownEl = document.getElementById('results-breakdown');
+      if (breakdownEl) {
+        const topics = [
+          'Future vs Current State', 'Semantic Conflicts', 'Speculative Checks',
+          'Queue Throughput', 'Failure Handling', 'Batching Benefits',
+          'Parallel Queues', 'Prerequisites', 'Industry Knowledge',
+          'Monorepo Strategies', 'Two-Step CI', 'Not Rocket Science Rule'
+        ];
+
+        let html = '<h4 class="breakdown-title">Question Breakdown</h4>';
+        answers.forEach((correct, i) => {
+          html += `
+            <div class="breakdown-item">
+              <span class="breakdown-icon">${correct ? '✅' : '❌'}</span>
+              <span class="breakdown-text">${topics[i]}</span>
+            </div>
+          `;
+        });
+        breakdownEl.innerHTML = html;
+      }
+    }
+
+    function fireConfetti() {
+      if (typeof (window as any).confetti === 'undefined') return;
+
+      (window as any).confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#f59e0b', '#fbbf24', '#fcd34d', '#4ade80', '#60a5fa']
+      });
+
+      setTimeout(() => {
+        (window as any).confetti({
+          particleCount: 50,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 },
+          colors: ['#f59e0b', '#fbbf24', '#fcd34d']
+        });
+      }, 250);
+
+      setTimeout(() => {
+        (window as any).confetti({
+          particleCount: 50,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 },
+          colors: ['#f59e0b', '#fbbf24', '#fcd34d']
+        });
+      }, 400);
+    }
+
+    // Retry
+    retryBtn?.addEventListener('click', () => {
+      currentQ = 0;
+      score = 0;
+      answers = [];
+
+      questions.forEach((card, i) => {
+        card.style.display = i === 0 ? 'block' : 'none';
+        const options = card.querySelectorAll('.option-btn');
+        options.forEach(o => {
+          o.classList.remove('correct', 'incorrect');
+          (o as HTMLButtonElement).disabled = false;
+        });
+        const explanation = card.querySelector('.explanation') as HTMLElement;
+        if (explanation) explanation.style.display = 'none';
+      });
+
+      if (progressFill) progressFill.style.width = '8.33%';
+      if (progressText) progressText.textContent = 'Question 1 / 12';
+      if (currentScoreEl) currentScoreEl.textContent = '0';
+      if (nextBtn) {
+        nextBtn.textContent = 'Next Question →';
+        (nextBtn as HTMLButtonElement).disabled = true;
+      }
+
+      if (results) results.style.display = 'none';
+      if (intro) intro.style.display = 'block';
+    });
+
+    // Download diploma as image
+    const downloadBtn = document.getElementById('download-diploma');
+    const shareToast = document.getElementById('share-toast');
+
+    downloadBtn?.addEventListener('click', async () => {
+      const diploma = document.getElementById('diploma');
+      if (!diploma || typeof (window as any).html2canvas === 'undefined') {
+        showToast('Please wait for the page to fully load...');
+        return;
+      }
+
+      showToast('Generating your diploma...');
+
+      try {
+        const canvas = await (window as any).html2canvas(diploma, {
+          backgroundColor: '#13151a',
+          scale: 2,
+          useCORS: true,
+          logging: false,
+        });
+
+        const link = document.createElement('a');
+        link.download = `merge-queue-diploma-${candidateName.replace(/\s+/g, '-').toLowerCase()}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+
+        showToast('Diploma downloaded! 🎉');
+      } catch (err) {
+        console.error('Failed to generate diploma:', err);
+        showToast('Failed to generate image. Try again.');
+      }
+    });
+
+    function showToast(message: string) {
+      if (shareToast) {
+        shareToast.textContent = message;
+        shareToast.classList.add('show');
+        setTimeout(() => shareToast.classList.remove('show'), 3000);
+      }
+    }
+
+    // Share buttons
+    const shareTwitter = document.getElementById('share-twitter');
+    const shareLinkedin = document.getElementById('share-linkedin');
+
+    const getShareText = () => {
+      const gradeEl = document.getElementById('diploma-grade');
+      const grade = gradeEl?.textContent || '';
+      return `🎓 I scored ${score}/12 on the Merge Queue Mastery Exam and earned "${grade}"!\n\nTest your knowledge:`;
+    };
+
+    const shareUrl = 'https://merge-queue.academy/decision/final-quiz/';
+
+    shareTwitter?.addEventListener('click', () => {
+      const text = encodeURIComponent(getShareText());
+      const url = encodeURIComponent(shareUrl);
+      window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+    });
+
+    shareLinkedin?.addEventListener('click', async () => {
+      const text = getShareText() + ' ' + shareUrl;
+      // Copy text to clipboard for user to paste
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast('Text copied! Paste it in LinkedIn 📋');
+      } catch (e) {
+        // Fallback if clipboard fails
+      }
+      // Open LinkedIn share dialog
+      const url = encodeURIComponent(shareUrl);
+      window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
+    });
+  });
+</script>

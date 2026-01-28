@@ -123,18 +123,6 @@ export default defineConfig({
 					label: 'Use Cases',
 					autogenerate: { directory: 'use-cases' },
 				},
-				{
-					label: 'Real World',
-					autogenerate: { directory: 'real-world' },
-				},
-				{
-					label: 'Getting Started',
-					autogenerate: { directory: 'getting-started' },
-				},
-				{
-					label: 'Best Practices',
-					autogenerate: { directory: 'best-practices' },
-				},
 			],
 		}),
 	],
