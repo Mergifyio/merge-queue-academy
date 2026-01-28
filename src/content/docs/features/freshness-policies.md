@@ -56,5 +56,5 @@ flowchart LR
 
 Freshness policies work well with:
 - **[Parallel Queues](/features/parallel-queues/)** - per-scope freshness
-- **[Speculative Merging](/features/speculative-merging/)** - reduce re-testing
+- **[Speculative Checks](/features/speculative-merging/)** - reduce re-testing
 - **[Batching](/features/batching/)** - merge multiple PRs atomically

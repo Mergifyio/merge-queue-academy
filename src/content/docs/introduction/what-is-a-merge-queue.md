@@ -87,7 +87,7 @@ Modern merge queues offer more than serialization:
 
 - **[Two-Step CI](/features/two-step-ci/)** — Separate PR validation from queue validation
 - **[Batching](/features/batching/)** — Test multiple PRs together
-- **[Speculative Merging](/features/speculative-merging/)** — Parallelize testing by assuming success
+- **[Speculative Checks](/features/speculative-merging/)** — Parallelize testing by assuming success
 - **[Parallel Queues](/features/parallel-queues/)** — Independent queues for non-conflicting changes
 - **[Freshness Policies](/features/freshness-policies/)** — Balance safety and throughput
 - **[Priority Management](/features/priority-management/)** — Let urgent PRs jump the queue

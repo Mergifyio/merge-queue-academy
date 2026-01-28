@@ -61,7 +61,7 @@ gitGraph
 
 The test branch contains:
 - All commits from `main`
-- All commits from PRs ahead in the queue (if using [speculative merging](/features/speculative-merging/))
+- All commits from PRs ahead in the queue (if using [speculative checks](/features/speculative-merging/))
 - The PR's changes, merged in
 
 ### Stage 3: Running CI

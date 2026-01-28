@@ -1,5 +1,5 @@
 ---
-title: Speculative Merging
+title: Speculative Checks
 description: Parallelize testing by assuming earlier PRs will pass.
 sidebar:
   order: 3

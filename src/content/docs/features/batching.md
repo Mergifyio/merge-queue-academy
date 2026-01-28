@@ -59,7 +59,7 @@ Batch [1,2,3,4] fails
 **Pros:**
 - Dramatically reduces CI cost and resource usage
 - Fewer CI runs means less infrastructure load
-- Works well with [speculative merging](/features/speculative-merging/) for both speed and efficiency
+- Works well with [speculative checks](/features/speculative-merging/) for both speed and efficiency
 
 **Cons:**
 - One failure affects the whole batch

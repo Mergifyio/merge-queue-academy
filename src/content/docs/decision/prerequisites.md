@@ -99,7 +99,7 @@ But not everyone can achieve this—and that's okay. If your CI is slower, merge
 
 - **[Batching](/features/batching/)** — Test multiple PRs together, amortizing CI time across the batch
 - **[Two-step CI](/features/two-step-ci/)** — Run fast checks on PRs, full suite only in the queue
-- **[Speculative merging](/features/speculative-merging/)** — Test PRs in parallel, assuming earlier ones will pass
+- **[Speculative checks](/features/speculative-merging/)** — Test PRs in parallel, assuming earlier ones will pass
 - **[Parallel queues](/features/parallel-queues/)** — Separate queues for independent parts of the codebase
 
 ### The real question
