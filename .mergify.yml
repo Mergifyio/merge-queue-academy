@@ -1,3 +1,21 @@
+extends: .github
+
+merge_protections:
+  - name: 👀 Review Requirements
+    if:
+      - author != dependabot[bot]
+    success_conditions:
+      - "#approved-reviews-by >= 1"
+
 queue_rules:
   - name: default
     autoqueue: true
+    autoqueue: true
+    commit_message_template: |
+      {{ title }} (#{{ number }})
+
+      {{ body }}
+    merge_method: squash
+
+merge_protections_settings:
+  reporting_method: deployments
