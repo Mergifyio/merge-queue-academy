@@ -74,18 +74,21 @@ Manual solutions don't scale. "Just rebase before merging" becomes a full-time j
 ## Use Cases
 
 <CardGrid>
-  <Card title="Monorepos" icon="seti:folder">
-    Many teams, independent components, complex dependency graphs. Merge queues with scopes let changes flow without blocking unrelated work.
-  </Card>
-  <Card title="High-Velocity Teams" icon="rocket">
-    20+ PRs per day? Without a queue, you're playing merge roulette. With one, every commit on main is guaranteed tested.
-  </Card>
-  <Card title="Long CI Pipelines" icon="stopwatch">
-    30+ minute builds make rebasing painful. Batching and speculation turn that cost into an investment.
-  </Card>
-  <Card title="Regulated Industries" icon="approve-check-circle">
-    Audit trails, compliance requirements, and zero tolerance for broken builds. Merge queues provide the guarantees you need.
-  </Card>
+  <LinkCard
+    title="Monorepos"
+    description="Many teams, independent components, complex dependency graphs. Merge queues with scopes let changes flow without blocking unrelated work."
+    href="/use-cases/monorepos/"
+  />
+  <LinkCard
+    title="High-Velocity Teams"
+    description="20+ PRs per day? Without a queue, you're playing merge roulette. With one, every commit on main is guaranteed tested."
+    href="/use-cases/high-velocity-teams/"
+  />
+  <LinkCard
+    title="Long CI Pipelines"
+    description="30+ minute builds make rebasing painful. Batching and speculation turn that cost into an investment."
+    href="/use-cases/long-ci-pipelines/"
+  />
 </CardGrid>
 
 ---
@@ -99,8 +102,8 @@ Manual solutions don't scale. "Just rebase before merging" becomes a full-time j
     href="/decision/failure-scenarios/"
   />
   <LinkCard
-    title="Tool Comparison"
-    description="GitHub MQ, Mergify, Aviator, Trunk, and more."
-    href="/real-world/tool-comparison/"
+    title="Companies Using Merge Queues"
+    description="How Uber, Shopify, GitHub, and others use them at scale."
+    href="/introduction/companies-using-merge-queues/"
   />
 </CardGrid>

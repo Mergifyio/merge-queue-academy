@@ -175,9 +175,8 @@ Frame it as an experiment:
 
 1. **Measure current state** — Track broken main incidents for 2 weeks
 2. **Calculate the cost** — Use the ROI formula above
-3. **Choose your tool** — See [Tool Comparison](/real-world/tool-comparison/)
-4. **Propose a pilot** — Start small, measure results
-5. **Share the wins** — Document time saved, incidents prevented
+3. **Propose a pilot** — Start small, measure results
+4. **Share the wins** — Document time saved, incidents prevented
 
 ---
 

@@ -2,7 +2,7 @@
 title: Companies Using Merge Queues
 description: Real examples of companies using merge queues at scale, with public sources.
 sidebar:
-  order: 1
+  order: 3
 ---
 
 Merge queues aren't theoretical—they're battle-tested at some of the largest engineering organizations in the world. Here's how real companies use them.
