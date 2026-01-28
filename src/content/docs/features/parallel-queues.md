@@ -7,23 +7,20 @@ sidebar:
 
 Not all changes conflict with each other. A frontend CSS change and a backend API change can often be tested and merged independently. **Parallel queues** (sometimes called "partitions" or "scopes") allow this:
 
-```mermaid
-flowchart TD
-    subgraph "Single Queue (Sequential)"
-        Q1[Frontend PR] --> Q2[Backend PR] --> Q3[Docs PR] --> Q4[Frontend PR]
-    end
+**Single queue:** all PRs wait in one line, even if they don't conflict.
 
-    subgraph "Parallel Queues"
-        subgraph Frontend
-            F1[Frontend PR] --> F2[Frontend PR]
-        end
-        subgraph Backend
-            B1[Backend PR]
-        end
-        subgraph Docs
-            D1[Docs PR]
-        end
-    end
+```mermaid
+flowchart LR
+    Q1["Frontend"] --> Q2["Backend"] --> Q3["Docs"] --> Q4["Frontend"] --> Main["main"]
+```
+
+**Parallel queues:** independent scopes merge simultaneously.
+
+```mermaid
+flowchart LR
+    F1["Frontend"] --> F2["Frontend"] --> Main["main"]
+    B["Backend"] --> Main
+    D["Docs"] --> Main
 ```
 
 ## How It Works
@@ -39,37 +36,9 @@ This dramatically increases throughput for large monorepos where most changes do
 
 Common approaches to defining parallel queues:
 
-### By Directory
-
-```yaml
-scopes:
-  frontend:
-    paths: ["src/frontend/**", "public/**"]
-  backend:
-    paths: ["src/api/**", "src/services/**"]
-  docs:
-    paths: ["docs/**", "*.md"]
-```
-
-### By Team
-
-```yaml
-scopes:
-  team-payments:
-    paths: ["src/payments/**"]
-  team-auth:
-    paths: ["src/auth/**"]
-```
-
-### By Build Target
-
-```yaml
-scopes:
-  ios-app:
-    targets: ["//mobile/ios:app"]
-  android-app:
-    targets: ["//mobile/android:app"]
-```
+- **By directory** — group by file paths (`src/frontend/`, `src/backend/`, `docs/`)
+- **By team** — each team owns their scope and merge pace
+- **By build target** — particularly useful with monorepo build tools like Bazel, Rush, Nx, Turborepo, or Pants that understand dependency graphs
 
 ## Handling Cross-Scope Changes
 
