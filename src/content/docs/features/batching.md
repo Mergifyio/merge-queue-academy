@@ -5,29 +5,22 @@ sidebar:
   order: 2
 ---
 
-When CI takes 30 minutes and you have 10 PRs waiting, sequential testing would take 5 hours. Batching groups multiple PRs into a single CI run:
+Testing each PR individually means one CI run per PR. With 10 PRs, that's 10 CI runs. Batching groups multiple PRs into a single CI run, dramatically cutting CI cost and resource usage.
+
+| | Without Batching | With Batching |
+|---|---|---|
+| **PRs** | 4 | 4 |
+| **CI runs** | 4 | 1 |
+| **Cost** | 4x | 1x |
 
 ```mermaid
 flowchart TD
-    subgraph Queue
-        PR1[PR #1]
-        PR2[PR #2]
-        PR3[PR #3]
-        PR4[PR #4]
-    end
-
-    subgraph "Without Batching"
-        S1[CI Run 1: PR#1] --> S2[CI Run 2: PR#2]
-        S2 --> S3[CI Run 3: PR#3]
-        S3 --> S4[CI Run 4: PR#4]
-    end
-
-    subgraph "With Batching"
-        B1[CI Run 1: PR#1 + PR#2 + PR#3 + PR#4]
-    end
-
-    Queue --> S1
-    Queue --> B1
+    PR1["PR #1"] --> Batch["Batch"]
+    PR2["PR #2"] --> Batch
+    PR3["PR #3"] --> Batch
+    PR4["PR #4"] --> Batch
+    Batch --> CI["CI runs once"]
+    CI --> |"✅ Pass"| Merge["All 4 PRs merge"]
 ```
 
 ## How It Works
@@ -41,40 +34,32 @@ flowchart TD
 
 If the batch fails, the merge queue needs to identify which PR caused the failure. Common strategies:
 
-### Binary Search
+### Speculative Bisection
 
-Split the batch in half and test each half. Continue splitting until the failing PR is found.
+Test overlapping subsets in parallel. This allows partial merges while identifying failures.
 
 ```
 Batch [1,2,3,4] fails
-  → Test [1,2] and [3,4]
-  → [1,2] passes, [3,4] fails
-  → Test [3] and [4]
-  → [3] fails → Remove PR #3
+  → Test [1,2] and [1,2,3] in parallel
+  → [1,2] passes → merge PR #1 and #2
+  → [1,2,3] fails → PR #3 is the problem
+  → Remove PR #3
+  → Put PR #4 back in queue
 ```
-
-### Optimistic Retry
-
-Remove the most recently added PR and retry. Fast but may remove innocent PRs.
-
-### Full Bisection
-
-Test each PR individually. Slowest but guarantees finding all failures.
 
 ## Configuration Options
 
 | Setting | Description |
 |---------|-------------|
 | **Batch size** | Maximum PRs per batch (e.g., 5, 10, unlimited) |
-| **Batch window** | Time to wait for more PRs before starting CI |
-| **Failure strategy** | How to identify failing PRs (binary search, etc.) |
+| **Batch wait time** | Time to wait for more PRs before starting CI |
 
 ## Trade-offs
 
 **Pros:**
-- Dramatically reduces total CI time
-- More efficient resource usage
-- Faster time-to-merge for most PRs
+- Dramatically reduces CI cost and resource usage
+- Fewer CI runs means less infrastructure load
+- Works well with [speculative merging](/features/speculative-merging/) for both speed and efficiency
 
 **Cons:**
 - One failure affects the whole batch
