@@ -253,8 +253,6 @@ If CI fails due to a flaky test:
 - Some require manual re-queue
 - Some track flake rates and adjust behavior
 
-See [Troubleshooting](/best-practices/troubleshooting/) for more on handling flaky tests.
-
 ## The Test Branch Lifecycle
 
 Test branches are temporary. Here's their lifecycle:
