@@ -86,8 +86,8 @@ That's just the direct cost. Add:
 
 Most merge queue solutions cost:
 - **SaaS options:** $50-500/month depending on scale
-- **Self-hosted (Mergify, Bors):** Engineering time to set up + maintain
-- **Platform-native (GitHub merge queue):** Free, limited features
+- **Self-hosted:** Engineering time to set up + maintain
+- **Platform-native:** Free, but often limited features
 
 **The math usually works out to 10-50x ROI.**
 

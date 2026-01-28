@@ -2,7 +2,7 @@
 title: Prerequisites
 description: What to fix before adopting a merge queue - flaky tests, CI reliability, and failure rates.
 sidebar:
-  order: 3
+  order: 4
 ---
 
 A merge queue is not a silver bullet. It amplifies your existing CI practices—both the good and the bad. If your tests are flaky, the queue will surface that pain constantly. If your CI is slow, the queue becomes a bottleneck.

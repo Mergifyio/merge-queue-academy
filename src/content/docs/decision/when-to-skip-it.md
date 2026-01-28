@@ -2,7 +2,7 @@
 title: When to Skip It
 description: When a merge queue isn't the right choice - small teams, low volume, simple repos.
 sidebar:
-  order: 4
+  order: 3
 ---
 
 A merge queue solves real problems—but it also adds complexity. If you don't have those problems, the queue is overhead without benefit.
