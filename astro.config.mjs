@@ -105,6 +105,15 @@ export default defineConfig({
 					tag: 'script',
 					attrs: { src: '/scripts/mermaid-zoom.js', defer: true },
 				},
+				// Plausible analytics
+				{
+					tag: 'script',
+					attrs: { async: true, src: 'https://plausible.io/js/pa-gxRuP-9TwHyQiBZJszz3T.js' },
+				},
+				{
+					tag: 'script',
+					content: `window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()`,
+				},
 				// Open Graph defaults
 				{
 					tag: 'meta',
