@@ -3,10 +3,24 @@ import config from 'virtual:starlight/user-config';
 import type { Props } from '@astrojs/starlight/props';
 
 const currentYear = new Date().getFullYear();
+
+// Construct GitHub edit URL from current path
+const pathname = Astro.url.pathname.replace(/\/$/, '') || '/index';
+const filePath = pathname === '/index' ? 'index.mdx' : `${pathname.slice(1)}.md`;
+const githubEditUrl = `https://github.com/Mergifyio/merge-queue-academy/edit/main/src/content/docs/${filePath}`;
 ---
 
 <footer class="custom-footer">
   <div class="footer-content">
+    <div class="footer-edit">
+      <a href={githubEditUrl} target="_blank" rel="noopener" class="edit-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+        </svg>
+        Edit this page on GitHub
+      </a>
+    </div>
     <div class="footer-love">
       <span class="love-text">
         Written with
@@ -80,5 +94,28 @@ const currentYear = new Date().getFullYear();
   .footer-love a:hover {
     color: var(--mqa-accent-hover, #fbbf24);
     text-decoration: underline;
+  }
+
+  .footer-edit {
+    margin-bottom: 1rem;
+  }
+
+  .edit-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--mqa-text-muted, #8891a5);
+    font-family: var(--mqa-font-sans, system-ui, sans-serif);
+    font-size: 0.8rem;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .edit-link:hover {
+    color: var(--mqa-text, #f0f2f5);
+  }
+
+  .edit-link svg {
+    opacity: 0.7;
   }
 </style>
