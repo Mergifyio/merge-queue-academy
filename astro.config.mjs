@@ -105,6 +105,36 @@ export default defineConfig({
 					tag: 'script',
 					attrs: { src: '/scripts/mermaid-zoom.js', defer: true },
 				},
+				// Open Graph defaults
+				{
+					tag: 'meta',
+					attrs: { property: 'og:site_name', content: 'Merge Queue Academy' },
+				},
+				{
+					tag: 'meta',
+					attrs: { property: 'og:type', content: 'website' },
+				},
+				{
+					tag: 'meta',
+					attrs: { property: 'og:image', content: 'https://merge-queue.academy/og-default.png' },
+				},
+				{
+					tag: 'meta',
+					attrs: { property: 'og:image:width', content: '1200' },
+				},
+				{
+					tag: 'meta',
+					attrs: { property: 'og:image:height', content: '630' },
+				},
+				// Twitter Card defaults
+				{
+					tag: 'meta',
+					attrs: { name: 'twitter:card', content: 'summary_large_image' },
+				},
+				{
+					tag: 'meta',
+					attrs: { name: 'twitter:image', content: 'https://merge-queue.academy/og-default.png' },
+				},
 			],
 			sidebar: [
 				{
