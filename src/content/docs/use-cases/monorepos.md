@@ -76,27 +76,21 @@ The standard approach: **the PR joins all affected queues and must pass all of t
 
 ```mermaid
 sequenceDiagram
-    participant PR as PR #42 (libs/common)
+    participant PR as PR #42
     participant FQ as Frontend Queue
     participant BQ as Backend Queue
-    participant CI as CI System
     participant Main as main
 
-    PR->>FQ: Joins queue (affects frontend)
-    PR->>BQ: Joins queue (affects backend)
+    PR->>FQ: Joins (affects frontend)
+    PR->>BQ: Joins (affects backend)
 
-    par Frontend CI
-        FQ->>CI: Run frontend tests
-        CI-->>FQ: ✓ Pass
-    and Backend CI
-        BQ->>CI: Run backend tests
-        CI-->>BQ: ✓ Pass
-    end
+    Note over FQ,BQ: CI runs in parallel
 
-    Note right of PR: Both queues passed
+    FQ-->>FQ: ✓ Frontend tests pass
+    BQ-->>BQ: ✓ Backend tests pass
 
-    FQ->>Main: Ready to merge
-    BQ->>Main: Ready to merge
+    FQ->>Main: Ready
+    BQ->>Main: Ready
     Main-->>PR: ✓ Merged
 ```
 
@@ -104,26 +98,21 @@ If either queue fails, the PR is removed from both:
 
 ```mermaid
 sequenceDiagram
-    participant PR as PR #42 (libs/common)
+    participant PR as PR #42
     participant FQ as Frontend Queue
     participant BQ as Backend Queue
-    participant CI as CI System
 
     PR->>FQ: Joins queue
     PR->>BQ: Joins queue
 
-    par Frontend CI
-        FQ->>CI: Run frontend tests
-        CI-->>FQ: ✓ Pass
-    and Backend CI
-        BQ->>CI: Run backend tests
-        CI-->>BQ: ✗ Fail
-    end
+    Note over FQ,BQ: CI runs in parallel
 
-    BQ->>PR: Remove from backend queue
+    FQ-->>FQ: ✓ Frontend passes
+    BQ-->>BQ: ✗ Backend fails
+
     BQ->>FQ: Notify failure
-    FQ->>PR: Remove from frontend queue
-    Note right of PR: Developer fixes and re-queues
+    FQ-->>PR: Removed from both queues
+    Note right of PR: Fix and re-queue
 ```
 
 ## CI Optimization

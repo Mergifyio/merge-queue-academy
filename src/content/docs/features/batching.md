@@ -54,12 +54,23 @@ Batch [1,2,3,4] fails
 | **Batch size** | Maximum PRs per batch (e.g., 5, 10, unlimited) |
 | **Batch wait time** | Time to wait for more PRs before starting CI |
 
+## Combining with Speculative Checks
+
+Batching and [speculative checks](/features/speculative-merging/) are complementary strategies that can be used together:
+
+:::tip[Best of both worlds]
+- **Batching** reduces CI cost by testing multiple PRs per run
+- **Speculative checks** reduce latency by testing batches in parallel
+
+A queue might test batch [1-3] while speculatively testing batch [4-6], achieving both efficiency and speed.
+:::
+
 ## Trade-offs
 
 **Pros:**
 - Dramatically reduces CI cost and resource usage
 - Fewer CI runs means less infrastructure load
-- Works well with [speculative checks](/features/speculative-merging/) for both speed and efficiency
+- Combines well with speculative checks for both speed and efficiency
 
 **Cons:**
 - One failure affects the whole batch

@@ -71,6 +71,17 @@ You can limit how far ahead the queue speculates:
 
 Higher depth = more parallelism but more wasted CI if early PRs fail.
 
+## Combining with Batching
+
+Speculative checks and [batching](/features/batching/) work well together:
+
+:::tip[Maximize throughput]
+- **Speculative checks** reduce latency by testing in parallel
+- **Batching** reduces CI cost by grouping PRs per run
+
+Example: speculatively test batch [1-3] and batch [4-6] in parallel. You get the speed of speculation with the efficiency of batching.
+:::
+
 ## Best For
 
 - Teams with high PR volume
