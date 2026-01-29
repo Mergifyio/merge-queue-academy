@@ -46,13 +46,16 @@ Before adopting a merge queue, your test suite should have a flake rate under 2%
 Run your test suite 100+ times on the same commit. Count failures.
 
 ```bash
-# Simple approach: run tests N times, count failures
-for i in {1..100}; do
-  npm test > /dev/null 2>&1 || echo "FAIL"
-done | grep -c FAIL
+# Run tests N times, track pass/fail rate
+runs=100; fails=0
+for i in $(seq 1 $runs); do
+  npm test &>/dev/null || ((fails++))
+  printf "\rRun %d/%d (failures: %d)" "$i" "$runs" "$fails"
+done
+echo -e "\n\nFlake rate: $fails/$runs ($(echo "scale=1; $fails*100/$runs" | bc)%)"
 ```
 
-If you see more than 2 failures in 100 runs, you have work to do.
+If your flake rate exceeds 2%, you have work to do before adopting a merge queue.
 
 ### How to fix
 
