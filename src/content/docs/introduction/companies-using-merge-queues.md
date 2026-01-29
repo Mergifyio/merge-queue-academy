@@ -127,4 +127,4 @@ For the full story: [The Origin Story of Merge Queues](https://mergify.com/blog/
 
 ## The Takeaway
 
-These companies didn't adopt merge queues because they're trendy—they built them because they had to. At scale, the alternative (broken main, constant reverts, blocked developers) is simply too expensive.
+These companies built merge queues out of necessity. At scale, the cost of a broken main branch—blocked developers, constant reverts, deployment delays—exceeds the cost of implementing proper serialization. The pattern emerged independently at multiple organizations facing the same fundamental problem.

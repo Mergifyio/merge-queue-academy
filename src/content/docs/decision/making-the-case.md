@@ -136,7 +136,7 @@ Most merge queue solutions cost:
 
 ### "We're too small"
 
-> Fair. Under 5 engineers with few daily merges, manual coordination works. But set a trigger: "When we hit X merges/day, we revisit this."
+> This is valid. Under 5 engineers with few daily merges, manual coordination works. Consider setting a threshold: when you exceed N merges per day or experience your first semantic conflict, revisit the decision.
 
 ---
 
