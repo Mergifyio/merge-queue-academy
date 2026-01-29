@@ -74,6 +74,58 @@ src/
 
 The standard approach: **the PR joins all affected queues and must pass all of them**. A change to `libs/common` that's used by frontend and backend joins both queues, runs both CI suites, and only merges when both pass.
 
+```mermaid
+sequenceDiagram
+    participant PR as PR #42 (libs/common)
+    participant FQ as Frontend Queue
+    participant BQ as Backend Queue
+    participant CI as CI System
+    participant Main as main
+
+    PR->>FQ: Joins queue (affects frontend)
+    PR->>BQ: Joins queue (affects backend)
+
+    par Frontend CI
+        FQ->>CI: Run frontend tests
+        CI-->>FQ: ✓ Pass
+    and Backend CI
+        BQ->>CI: Run backend tests
+        CI-->>BQ: ✓ Pass
+    end
+
+    Note right of PR: Both queues passed
+
+    FQ->>Main: Ready to merge
+    BQ->>Main: Ready to merge
+    Main-->>PR: ✓ Merged
+```
+
+If either queue fails, the PR is removed from both:
+
+```mermaid
+sequenceDiagram
+    participant PR as PR #42 (libs/common)
+    participant FQ as Frontend Queue
+    participant BQ as Backend Queue
+    participant CI as CI System
+
+    PR->>FQ: Joins queue
+    PR->>BQ: Joins queue
+
+    par Frontend CI
+        FQ->>CI: Run frontend tests
+        CI-->>FQ: ✓ Pass
+    and Backend CI
+        BQ->>CI: Run backend tests
+        CI-->>BQ: ✗ Fail
+    end
+
+    BQ->>PR: Remove from backend queue
+    BQ->>FQ: Notify failure
+    FQ->>PR: Remove from frontend queue
+    Note right of PR: Developer fixes and re-queues
+```
+
 ## CI Optimization
 
 Running the full test suite for every PR defeats the purpose. Monorepo-aware CI helps:
