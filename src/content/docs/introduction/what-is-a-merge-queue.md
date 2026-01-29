@@ -91,7 +91,6 @@ Modern merge queues offer more than serialization:
 - **[Parallel Queues](/features/parallel-queues/)** — Independent queues for non-conflicting changes
 - **[Freshness Policies](/features/freshness-policies/)** — Balance safety and throughput
 - **[Priority Management](/features/priority-management/)** — Let urgent PRs jump the queue
-- **[Affected Targets](/features/affected-targets/)** — Test only what changed
 
 ## Summary
 
