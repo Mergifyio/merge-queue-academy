@@ -33,7 +33,7 @@ flowchart LR
     Full --> Merge["Merge"]
 ```
 
-- **PR CI**: Lint, unit tests, build — catches 90% of issues in 5 minutes
+- **PR CI**: Lint, unit tests, build — catches most issues quickly (typically 80-90%)
 - **Queue CI**: Integration tests, E2E, full validation — runs only for approved PRs
 
 Engineers get fast feedback. The queue runs thorough checks. Both needs met.

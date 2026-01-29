@@ -205,7 +205,7 @@ Every time a developer is blocked, they have to:
 2. Investigate or wait
 3. Resume their original work (losing context)
 
-Research by Gloria Mark at UC Irvine shows it takes **23 minutes** to regain focus after an interruption. A broken main interrupts everyone.
+[Research by Gloria Mark at UC Irvine](https://www.ics.uci.edu/~gmark/chi08-mark.pdf) shows it takes **23 minutes** to regain focus after an interruption. A broken main interrupts everyone.
 
 ### Compound Delays
 

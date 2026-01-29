@@ -72,7 +72,7 @@ Not all PRs are equal. [Priority management](/features/priority-management/) let
 
 ## Measuring Queue Health
 
-Track these metrics to know if your queue is keeping up:
+Track these metrics to know if your queue is keeping up. These thresholds are based on patterns observed at [high-performing teams like GitHub, Shopify, and Uber](/introduction/companies-using-merge-queues/)—adjust for your context:
 
 | Metric | Healthy | Warning | Critical |
 |--------|---------|---------|----------|

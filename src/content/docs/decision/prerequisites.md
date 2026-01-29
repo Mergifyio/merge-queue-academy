@@ -39,7 +39,7 @@ flowchart TD
 
 ### Target: <2% flake rate
 
-Before adopting a merge queue, your test suite should have a flake rate under 2%. That means fewer than 1 in 50 runs fails randomly.
+Before adopting a merge queue, your test suite should have a flake rate under 2%. That means fewer than 1 in 50 runs fails randomly. [Google's testing guidelines](https://testing.googleblog.com/2016/05/flaky-tests-at-google-and-how-we.html) discuss how they tackled this at scale.
 
 ### How to measure
 
@@ -96,7 +96,7 @@ CI speed matters because of the **feedback loop**. When a PR fails in the queue,
 
 ### Ideal: <20 minutes
 
-Under 20 minutes keeps the feedback loop tight. Developers can fix issues and re-queue within the same focus session.
+Under 20 minutes keeps the feedback loop tight. Developers can fix issues and re-queue within the same focus session. [Research on developer productivity](https://queue.acm.org/detail.cfm?id=3595878) shows that fast feedback cycles significantly improve developer experience.
 
 But not everyone can achieve this—and that's okay. If your CI is slower, merge queue features can help:
 
