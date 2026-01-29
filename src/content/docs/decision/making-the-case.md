@@ -180,4 +180,4 @@ Frame it as an experiment:
 
 ---
 
-Still not sure if you need one? Take the [interactive quiz](/decision/quiz/) or review the [signs you need a merge queue](/decision/signs-you-need-one/).
+Still not sure if you need one? Take the [interactive quiz](/decision/final-quiz/) or review [what happens without a merge queue](/decision/failure-scenarios/).

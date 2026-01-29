@@ -115,7 +115,7 @@ Skip the merge queue now, but revisit when:
 - Main starts breaking regularly
 - Developers start complaining about rebase loops
 
-The signals in [Do You Need a Merge Queue?](/decision/quiz/) will tell you when it's time.
+The signals in [What Happens Without a Merge Queue?](/decision/failure-scenarios/) will tell you when it's time.
 
 ---
 
