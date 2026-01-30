@@ -1,0 +1,747 @@
+---
+interface PainPoint {
+  id: string;
+  label: string;
+  weight: number;
+}
+
+interface Props {
+  painPoints?: PainPoint[];
+}
+
+const defaultPainPoints: PainPoint[] = [
+  { id: 'broken-main', label: 'Main branch broke this week', weight: 3 },
+  { id: 'rebase-loop', label: 'Rebased 3+ times for one PR', weight: 2 },
+  { id: 'who-broke', label: '"Who broke main?" in Slack', weight: 3 },
+  { id: 'merge-race', label: 'Merge race with a coworker', weight: 2 },
+  { id: 'ci-passed-main-failed', label: 'CI passed, then main failed', weight: 3 },
+  { id: 'blocked-deploy', label: 'Deploy blocked for hours', weight: 2 },
+  { id: 'revert-revert', label: 'Reverted a reverted revert', weight: 2 },
+  { id: 'stale-approved', label: 'PR approved but went stale', weight: 1 },
+  { id: 'hotfix-blocked', label: 'Emergency hotfix blocked by queue', weight: 2 },
+  { id: 'flaky-main-only', label: 'Flaky test on main but not PRs', weight: 2 },
+  { id: 'manual-coordination', label: '"Can I merge?" in Slack', weight: 2 },
+  { id: 'friday-freeze', label: 'Unwritten Friday deploy freeze', weight: 1 },
+];
+
+const { painPoints = defaultPainPoints } = Astro.props;
+---
+
+<div class="calculator-container" id="readiness-calculator">
+  <!-- Step 1: Team Profile -->
+  <div class="calculator-section" id="section-profile">
+    <div class="section-header">
+      <span class="section-number">1</span>
+      <h3 class="section-title">Your Team Profile</h3>
+    </div>
+
+    <div class="input-group">
+      <label class="input-label" for="team-size">
+        How many engineers contribute to this repo?
+      </label>
+      <div class="slider-container">
+        <input type="range" id="team-size" min="1" max="100" value="10" class="slider" />
+        <span class="slider-value" id="team-size-value">10</span>
+      </div>
+      <div class="slider-labels">
+        <span>1</span>
+        <span>25</span>
+        <span>50</span>
+        <span>75</span>
+        <span>100+</span>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label class="input-label" for="pr-frequency">
+        PRs merged to main per day (average)?
+      </label>
+      <div class="slider-container">
+        <input type="range" id="pr-frequency" min="1" max="50" value="5" class="slider" />
+        <span class="slider-value" id="pr-frequency-value">5</span>
+      </div>
+      <div class="slider-labels">
+        <span>1</span>
+        <span>10</span>
+        <span>25</span>
+        <span>40</span>
+        <span>50+</span>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label class="input-label" for="ci-duration">
+        CI pipeline duration (minutes)?
+      </label>
+      <div class="slider-container">
+        <input type="range" id="ci-duration" min="1" max="60" value="15" class="slider" />
+        <span class="slider-value" id="ci-duration-value">15</span>
+      </div>
+      <div class="slider-labels">
+        <span>1</span>
+        <span>15</span>
+        <span>30</span>
+        <span>45</span>
+        <span>60+</span>
+      </div>
+    </div>
+
+    <button class="next-btn" id="to-step-2" type="button">
+      Continue →
+    </button>
+  </div>
+
+  <!-- Step 2: Pain Points -->
+  <div class="calculator-section hidden" id="section-pain">
+    <div class="section-header">
+      <span class="section-number">2</span>
+      <h3 class="section-title">Pain Points</h3>
+    </div>
+    <p class="section-subtitle">Which of these have you experienced? (Select all that apply)</p>
+
+    <div class="pain-grid" id="pain-grid">
+      {painPoints.map((point) => (
+        <div
+          class="pain-item"
+          data-id={point.id}
+          data-weight={point.weight}
+          role="button"
+          tabindex="0"
+        >
+          <span class="pain-check">✓</span>
+          <span class="pain-label">{point.label}</span>
+        </div>
+      ))}
+    </div>
+
+    <div class="pain-counter">
+      <span id="pain-count">0</span> / {painPoints.length} selected
+    </div>
+
+    <div class="button-row">
+      <button class="back-btn" id="to-step-1" type="button">← Back</button>
+      <button class="calculate-btn" id="calculate-btn" type="button">
+        Calculate Readiness →
+      </button>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="calculator-section hidden" id="section-results">
+    <div class="result-score-container">
+      <div class="result-percentage" id="result-percentage">0%</div>
+      <div class="result-label" id="result-label">Calculating...</div>
+    </div>
+
+    <div class="result-breakdown" id="result-breakdown">
+      <div class="breakdown-item">
+        <span class="breakdown-label">Scale complexity</span>
+        <span class="breakdown-bar"><span class="breakdown-fill" id="scale-fill"></span></span>
+        <span class="breakdown-value" id="scale-value">-</span>
+      </div>
+      <div class="breakdown-item">
+        <span class="breakdown-label">Queue pressure</span>
+        <span class="breakdown-bar"><span class="breakdown-fill" id="pressure-fill"></span></span>
+        <span class="breakdown-value" id="pressure-value">-</span>
+      </div>
+      <div class="breakdown-item">
+        <span class="breakdown-label">Pain symptoms</span>
+        <span class="breakdown-bar"><span class="breakdown-fill" id="pain-fill"></span></span>
+        <span class="breakdown-value" id="pain-value">-</span>
+      </div>
+    </div>
+
+    <div class="result-insights" id="result-insights"></div>
+
+    <div class="result-actions">
+      <button class="restart-btn" id="restart-btn" type="button">Start Over</button>
+      <a href="/decision/making-the-case/" class="action-link">Make the Case →</a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .calculator-container {
+    margin: 2rem 0;
+    padding: 2rem;
+    background: var(--mqa-bg-subtle, #1a1d24);
+    border: 1px solid var(--mqa-border-subtle, #272c37);
+    border-radius: 12px;
+    max-width: 640px;
+  }
+
+  .calculator-section.hidden {
+    display: none;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: var(--mqa-accent, #f59e0b);
+    color: #0a0b0d;
+    border-radius: 50%;
+    font-family: var(--mqa-font-mono, 'IBM Plex Mono', monospace);
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .section-title {
+    font-family: var(--mqa-font-display, 'Space Grotesk', sans-serif);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--mqa-text, #f0f2f5);
+    margin: 0;
+  }
+
+  .section-subtitle {
+    font-size: 0.875rem;
+    color: var(--mqa-text-muted, #8891a5);
+    margin: -0.5rem 0 1.25rem 0;
+  }
+
+  /* Inputs */
+  .input-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .input-label {
+    display: block;
+    font-size: 0.9375rem;
+    color: var(--mqa-text-secondary, #b4bcd0);
+    margin-bottom: 0.75rem;
+  }
+
+  .slider-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .slider {
+    flex: 1;
+    height: 6px;
+    background: var(--mqa-bg-elevated, #282d38);
+    border-radius: 3px;
+    appearance: none;
+    cursor: pointer;
+  }
+
+  .slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--mqa-accent, #f59e0b);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+
+  .slider::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+  }
+
+  .slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: var(--mqa-accent, #f59e0b);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  .slider-value {
+    font-family: var(--mqa-font-mono, 'IBM Plex Mono', monospace);
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--mqa-accent, #f59e0b);
+    min-width: 3ch;
+    text-align: right;
+  }
+
+  .slider-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--mqa-text-muted, #8891a5);
+    margin-top: 0.25rem;
+    padding: 0 2px;
+  }
+
+  /* Pain Points Grid */
+  .pain-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    align-items: start;
+  }
+
+  .pain-grid > * {
+    margin: 0 !important;
+  }
+
+  @media (max-width: 500px) {
+    .pain-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .pain-item {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    height: 56px;
+    background: var(--mqa-bg-muted, #21252e);
+    border: 2px solid var(--mqa-border, #323846);
+    border-radius: 8px;
+    color: var(--mqa-text-secondary, #b4bcd0);
+    font-family: var(--mqa-font-sans, 'Instrument Sans', sans-serif);
+    font-size: 0.8125rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    box-sizing: border-box;
+  }
+
+  .pain-item:hover {
+    border-color: var(--mqa-accent, #f59e0b);
+    background: var(--mqa-bg-elevated, #282d38);
+  }
+
+  .pain-item.selected {
+    background: rgba(245, 158, 11, 0.15);
+    border-color: var(--mqa-accent, #f59e0b);
+    color: var(--mqa-text, #f0f2f5);
+  }
+
+  .pain-check {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--mqa-border, #323846);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    color: transparent;
+    transition: all 0.15s ease;
+    flex-shrink: 0;
+  }
+
+  .pain-item.selected .pain-check {
+    background: var(--mqa-accent, #f59e0b);
+    border-color: var(--mqa-accent, #f59e0b);
+    color: #0a0b0d;
+  }
+
+  .pain-label {
+    line-height: 1.3;
+  }
+
+  .pain-counter {
+    text-align: center;
+    font-family: var(--mqa-font-mono, 'IBM Plex Mono', monospace);
+    font-size: 0.875rem;
+    color: var(--mqa-text-muted, #8891a5);
+    margin-bottom: 1.5rem;
+  }
+
+  #pain-count {
+    color: var(--mqa-accent, #f59e0b);
+    font-weight: 600;
+  }
+
+  /* Buttons */
+  .button-row {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+  }
+
+  .next-btn,
+  .calculate-btn {
+    padding: 0.875rem 1.5rem;
+    background: var(--mqa-accent, #f59e0b);
+    border: none;
+    border-radius: 8px;
+    color: #0a0b0d;
+    font-family: var(--mqa-font-display, 'Space Grotesk', sans-serif);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .next-btn {
+    width: 100%;
+  }
+
+  .next-btn:hover,
+  .calculate-btn:hover {
+    background: var(--mqa-accent-hover, #fbbf24);
+    transform: translateY(-1px);
+  }
+
+  .back-btn {
+    padding: 0.875rem 1.25rem;
+    background: var(--mqa-bg-muted, #21252e);
+    border: 1px solid var(--mqa-border, #323846);
+    border-radius: 8px;
+    color: var(--mqa-text-secondary, #b4bcd0);
+    font-family: var(--mqa-font-sans, 'Instrument Sans', sans-serif);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .back-btn:hover {
+    border-color: var(--mqa-text-muted, #8891a5);
+    color: var(--mqa-text, #f0f2f5);
+  }
+
+  /* Results */
+  .result-score-container {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .result-percentage {
+    font-family: var(--mqa-font-display, 'Space Grotesk', sans-serif);
+    font-size: 4rem;
+    font-weight: 700;
+    color: var(--mqa-accent, #f59e0b);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .result-label {
+    font-family: var(--mqa-font-display, 'Space Grotesk', sans-serif);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--mqa-text, #f0f2f5);
+  }
+
+  .result-breakdown {
+    background: var(--mqa-bg-muted, #21252e);
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .breakdown-item {
+    display: grid;
+    grid-template-columns: 120px 1fr 50px;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .breakdown-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .breakdown-label {
+    font-size: 0.8125rem;
+    color: var(--mqa-text-secondary, #b4bcd0);
+  }
+
+  .breakdown-bar {
+    height: 8px;
+    background: var(--mqa-bg-elevated, #282d38);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .breakdown-fill {
+    height: 100%;
+    background: var(--mqa-accent, #f59e0b);
+    border-radius: 4px;
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+
+  .breakdown-value {
+    font-family: var(--mqa-font-mono, 'IBM Plex Mono', monospace);
+    font-size: 0.75rem;
+    color: var(--mqa-text-muted, #8891a5);
+    text-align: right;
+  }
+
+  .result-insights {
+    font-size: 0.9375rem;
+    color: var(--mqa-text-secondary, #b4bcd0);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .result-insights ul {
+    margin: 0.75rem 0 0 0;
+    padding-left: 1.25rem;
+  }
+
+  .result-insights li {
+    margin-bottom: 0.375rem;
+  }
+
+  .result-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .restart-btn {
+    padding: 0.75rem 1.25rem;
+    background: var(--mqa-bg-muted, #21252e);
+    border: 1px solid var(--mqa-border, #323846);
+    border-radius: 6px;
+    color: var(--mqa-text-secondary, #b4bcd0);
+    font-family: var(--mqa-font-sans, 'Instrument Sans', sans-serif);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .restart-btn:hover {
+    border-color: var(--mqa-text-muted, #8891a5);
+    color: var(--mqa-text, #f0f2f5);
+  }
+
+  .action-link {
+    display: inline-block;
+    padding: 0.75rem 1.25rem;
+    background: var(--mqa-accent, #f59e0b) !important;
+    border-radius: 6px;
+    color: #0a0b0d !important;
+    font-family: var(--mqa-font-display, 'Space Grotesk', sans-serif);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none !important;
+    transition: all 0.2s ease;
+  }
+
+  .action-link:hover {
+    background: var(--mqa-accent-hover, #fbbf24) !important;
+    transform: translateY(-1px);
+  }
+
+  /* Score color variations */
+  .result-percentage.low { color: var(--mqa-green, #4ade80); }
+  .result-percentage.medium { color: var(--mqa-accent, #f59e0b); }
+  .result-percentage.high { color: var(--mqa-red, #f87171); }
+</style>
+
+<script is:inline>
+  (function() {
+    document.addEventListener('DOMContentLoaded', () => {
+      const calculator = document.getElementById('readiness-calculator');
+      if (!calculator) return;
+
+      // Sections
+      const sectionProfile = document.getElementById('section-profile');
+      const sectionPain = document.getElementById('section-pain');
+      const sectionResults = document.getElementById('section-results');
+
+      // Inputs
+      const teamSizeSlider = document.getElementById('team-size');
+      const prFrequencySlider = document.getElementById('pr-frequency');
+      const ciDurationSlider = document.getElementById('ci-duration');
+
+      // Update slider displays
+      function updateSliderDisplay(slider, displayId) {
+        const display = document.getElementById(displayId);
+        if (display) {
+          const val = parseInt(slider.value);
+          display.textContent = val >= parseInt(slider.max) ? val + '+' : val;
+        }
+      }
+
+      [
+        [teamSizeSlider, 'team-size-value'],
+        [prFrequencySlider, 'pr-frequency-value'],
+        [ciDurationSlider, 'ci-duration-value']
+      ].forEach(([slider, displayId]) => {
+        if (slider) {
+          slider.addEventListener('input', () => updateSliderDisplay(slider, displayId));
+        }
+      });
+
+      // Navigation
+      document.getElementById('to-step-2')?.addEventListener('click', () => {
+        sectionProfile.classList.add('hidden');
+        sectionPain.classList.remove('hidden');
+      });
+
+      document.getElementById('to-step-1')?.addEventListener('click', () => {
+        sectionPain.classList.add('hidden');
+        sectionProfile.classList.remove('hidden');
+      });
+
+      // Pain points selection
+      const painItems = calculator.querySelectorAll('.pain-item');
+      const painCountEl = document.getElementById('pain-count');
+
+      function togglePainItem(item) {
+        item.classList.toggle('selected');
+        const count = calculator.querySelectorAll('.pain-item.selected').length;
+        if (painCountEl) painCountEl.textContent = count;
+      }
+
+      painItems.forEach(item => {
+        item.addEventListener('click', () => togglePainItem(item));
+        item.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            togglePainItem(item);
+          }
+        });
+      });
+
+      // Calculate
+      document.getElementById('calculate-btn')?.addEventListener('click', () => {
+        const teamSize = parseInt(teamSizeSlider?.value || '10');
+        const prFrequency = parseInt(prFrequencySlider?.value || '5');
+        const ciDuration = parseInt(ciDurationSlider?.value || '15');
+
+        // Gather pain points
+        const selectedPain = calculator.querySelectorAll('.pain-item.selected');
+        let painScore = 0;
+        selectedPain.forEach(item => {
+          painScore += parseInt(item.dataset.weight || '1');
+        });
+        const maxPainScore = Array.from(painItems).reduce((sum, item) =>
+          sum + parseInt(item.dataset.weight || '1'), 0);
+
+        // Calculate component scores (0-100)
+        // Scale: team size * log factor
+        const scaleScore = Math.min(100, (teamSize / 50) * 100);
+
+        // Queue pressure: PRs * CI duration interaction
+        // High PRs + long CI = very high pressure
+        const pressureRaw = (prFrequency / 20) * (ciDuration / 30);
+        const pressureScore = Math.min(100, pressureRaw * 100);
+
+        // Pain: weighted selection
+        const painPercent = (painScore / maxPainScore) * 100;
+
+        // Overall score: weighted combination
+        // Pain symptoms are most diagnostic, then pressure, then scale
+        const overallScore = Math.round(
+          (painPercent * 0.4) +
+          (pressureScore * 0.35) +
+          (scaleScore * 0.25)
+        );
+
+        // Show results
+        sectionPain.classList.add('hidden');
+        sectionResults.classList.remove('hidden');
+
+        // Update percentage
+        const percentEl = document.getElementById('result-percentage');
+        if (percentEl) {
+          percentEl.textContent = overallScore + '%';
+          percentEl.classList.remove('low', 'medium', 'high');
+          if (overallScore >= 70) percentEl.classList.add('high');
+          else if (overallScore >= 40) percentEl.classList.add('medium');
+          else percentEl.classList.add('low');
+        }
+
+        // Update label
+        const labelEl = document.getElementById('result-label');
+        if (labelEl) {
+          if (overallScore >= 70) {
+            labelEl.textContent = 'You Need a Merge Queue';
+          } else if (overallScore >= 40) {
+            labelEl.textContent = 'A Merge Queue Would Help';
+          } else {
+            labelEl.textContent = 'You Might Be Fine (For Now)';
+          }
+        }
+
+        // Update breakdown bars
+        function setBar(fillId, valueId, score, label) {
+          const fill = document.getElementById(fillId);
+          const value = document.getElementById(valueId);
+          if (fill) fill.style.width = Math.round(score) + '%';
+          if (value) value.textContent = label;
+        }
+
+        setBar('scale-fill', 'scale-value', scaleScore,
+          scaleScore >= 60 ? 'High' : scaleScore >= 30 ? 'Medium' : 'Low');
+        setBar('pressure-fill', 'pressure-value', pressureScore,
+          pressureScore >= 60 ? 'High' : pressureScore >= 30 ? 'Medium' : 'Low');
+        setBar('pain-fill', 'pain-value', painPercent,
+          painPercent >= 60 ? 'High' : painPercent >= 30 ? 'Medium' : 'Low');
+
+        // Generate insights
+        const insightsEl = document.getElementById('result-insights');
+        if (insightsEl) {
+          const insights = [];
+
+          if (overallScore >= 70) {
+            insights.push('Your team is experiencing significant friction. A merge queue would provide immediate relief.');
+          } else if (overallScore >= 40) {
+            insights.push('You\'re feeling some pain that will grow as you scale. Consider adopting a merge queue before it becomes urgent.');
+          } else {
+            insights.push('Your current workflow seems manageable. Revisit this assessment as your team grows.');
+          }
+
+          // Specific insights
+          const details = [];
+
+          if (teamSize >= 30 && prFrequency >= 15) {
+            details.push(`${teamSize} engineers merging ${prFrequency}+ PRs/day means coordination complexity grows quadratically`);
+          }
+
+          if (ciDuration >= 20 && prFrequency >= 10) {
+            details.push(`${ciDuration}-minute CI with ${prFrequency} daily PRs = branches go stale before they merge`);
+          }
+
+          if (painPercent >= 50) {
+            details.push(`${selectedPain.length} pain points selected indicates real-world problems, not just theoretical risk`);
+          }
+
+          if (teamSize < 10 && prFrequency < 5 && painPercent < 30) {
+            details.push('Low volume and few pain points suggest your current process is working');
+          }
+
+          if (details.length > 0) {
+            insights.push('<ul>' + details.map(d => `<li>${d}</li>`).join('') + '</ul>');
+          }
+
+          insightsEl.innerHTML = insights.join('');
+        }
+      });
+
+      // Restart
+      document.getElementById('restart-btn')?.addEventListener('click', () => {
+        // Reset inputs
+        if (teamSizeSlider) teamSizeSlider.value = '10';
+        if (prFrequencySlider) prFrequencySlider.value = '5';
+        if (ciDurationSlider) ciDurationSlider.value = '15';
+
+        updateSliderDisplay(teamSizeSlider, 'team-size-value');
+        updateSliderDisplay(prFrequencySlider, 'pr-frequency-value');
+        updateSliderDisplay(ciDurationSlider, 'ci-duration-value');
+
+        // Reset pain points
+        painItems.forEach(item => item.classList.remove('selected'));
+        if (painCountEl) painCountEl.textContent = '0';
+
+        // Show first section
+        sectionResults.classList.add('hidden');
+        sectionProfile.classList.remove('hidden');
+      });
+    });
+  })();
+</script>

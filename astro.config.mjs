@@ -162,6 +162,10 @@ export default defineConfig({
 					label: 'Use Cases',
 					autogenerate: { directory: 'use-cases' },
 				},
+				{
+					label: 'Glossary',
+					link: '/glossary/',
+				},
 			],
 		}),
 	],
