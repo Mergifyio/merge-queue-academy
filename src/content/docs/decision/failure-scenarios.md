@@ -7,6 +7,8 @@ sidebar:
 
 When main breaks, failures cascade. This page shows what happens and why the costs exceed what most teams expect.
 
+<iframe width="100%" style="aspect-ratio: 16 / 9;" src="https://www.youtube.com/embed/4PLTGJg82aw" title="Why You Need a Merge Queue" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 ## The Anatomy of a Broken Main
 
 Two developers, Alice and Bob, work on separate features.
