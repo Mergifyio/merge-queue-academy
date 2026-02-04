@@ -317,44 +317,43 @@
     <div class="diploma-wrapper">
       <div class="diploma" id="diploma">
         <div class="diploma-bg"></div>
+        <div class="diploma-ornament top-left">❧</div>
+        <div class="diploma-ornament top-right">❧</div>
+        <div class="diploma-ornament bottom-left">❧</div>
+        <div class="diploma-ornament bottom-right">❧</div>
         <div class="diploma-content">
-          <div class="diploma-ornament top-left">❧</div>
-          <div class="diploma-ornament top-right">❧</div>
-
-          <div class="diploma-header-section">
+          <div class="diploma-left">
             <div class="diploma-icon">🎓</div>
-            <h2>Certificate of Achievement</h2>
-            <div class="diploma-divider">
-              <span class="divider-star">✦</span>
-            </div>
-          </div>
-
-          <div class="diploma-body">
-            <p class="diploma-subtitle">This is to certify that</p>
-            <div class="diploma-name" id="diploma-name">Distinguished Graduate</div>
-            <p class="diploma-text">has successfully demonstrated proficiency in</p>
-            <p class="diploma-subject">Merge Queue Engineering</p>
-
-            <div class="diploma-score-section">
-              <div class="score-badge">
-                <span class="score-number" id="final-score">0</span>
-                <span class="score-total">/12</span>
-              </div>
-              <div class="diploma-grade" id="diploma-grade">Merge Queue Master</div>
-            </div>
-          </div>
-
-          <div class="diploma-footer">
             <div class="diploma-seal">
               <span class="seal-emoji">🏆</span>
               <span class="seal-text">CERTIFIED</span>
             </div>
-            <div class="diploma-date" id="diploma-date"></div>
-            <div class="diploma-source">merge-queue.academy</div>
           </div>
 
-          <div class="diploma-ornament bottom-left">❧</div>
-          <div class="diploma-ornament bottom-right">❧</div>
+          <div class="diploma-center">
+            <h2>Certificate of Achievement</h2>
+            <div class="diploma-divider">
+              <span class="divider-line"></span>
+              <span class="divider-star">✦</span>
+              <span class="divider-line"></span>
+            </div>
+            <p class="diploma-subtitle">This is to certify that</p>
+            <div class="diploma-name" id="diploma-name">Distinguished Graduate</div>
+            <p class="diploma-text">has demonstrated proficiency in</p>
+            <p class="diploma-subject">Merge Queue Engineering</p>
+          </div>
+
+          <div class="diploma-right">
+            <div class="score-badge">
+              <span class="score-number" id="final-score">0</span>
+              <span class="score-total">/12</span>
+            </div>
+            <div class="diploma-grade" id="diploma-grade">Merge Queue Master</div>
+            <div class="diploma-meta">
+              <div class="diploma-date" id="diploma-date"></div>
+              <div class="diploma-source">merge-queue.academy</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -722,63 +721,104 @@
     animation: fadeIn 0.5s ease;
   }
 
-  /* Beautiful Diploma */
+  /* Beautiful Diploma - Social Media Optimized (1.91:1 aspect ratio) */
   .diploma-wrapper {
     margin-bottom: 2rem;
+    overflow-x: auto;
+    overflow-y: visible;
   }
 
   .diploma {
     position: relative;
-    background: linear-gradient(145deg, #1a1d24 0%, #13151a 100%);
+    background: linear-gradient(135deg, #1a1d24 0%, #13151a 50%, #1a1d24 100%);
     border-radius: 12px;
-    overflow: hidden;
     box-shadow:
       0 0 0 4px #f59e0b,
       0 0 0 6px #13151a,
       0 0 0 8px #323846,
       0 20px 40px rgba(0, 0, 0, 0.4);
+    /* Social media friendly: 1.91:1 aspect ratio */
+    width: calc(100% - 20px);
+    max-width: 650px;
+    margin: 10px auto;
+    aspect-ratio: 1.91 / 1;
   }
 
   .diploma-bg {
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(circle at 20% 20%, rgba(245, 158, 11, 0.08) 0%, transparent 50%),
-      radial-gradient(circle at 80% 80%, rgba(251, 191, 36, 0.08) 0%, transparent 50%);
+      radial-gradient(circle at 10% 50%, rgba(245, 158, 11, 0.12) 0%, transparent 40%),
+      radial-gradient(circle at 90% 50%, rgba(251, 191, 36, 0.12) 0%, transparent 40%),
+      radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.05) 0%, transparent 60%);
     pointer-events: none;
   }
 
   .diploma-content {
     position: relative;
-    padding: 2.5rem 2rem;
-    text-align: center;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 2.2fr 1fr;
+    align-items: center;
+    margin: 0;
+    padding: 0.5rem 2rem 1rem;
+    box-sizing: border-box;
   }
 
   .diploma-ornament {
     position: absolute;
     font-size: 1.5rem;
     color: #f59e0b;
-    opacity: 0.6;
+    opacity: 0.5;
   }
 
-  .diploma-ornament.top-left { top: 1rem; left: 1rem; transform: rotate(-45deg); }
-  .diploma-ornament.top-right { top: 1rem; right: 1rem; transform: rotate(45deg) scaleX(-1); }
-  .diploma-ornament.bottom-left { bottom: 1rem; left: 1rem; transform: rotate(45deg); }
-  .diploma-ornament.bottom-right { bottom: 1rem; right: 1rem; transform: rotate(-45deg) scaleX(-1); }
+  .diploma-ornament.top-left { top: -0.75rem; left: 0.5rem; transform: rotate(-45deg); }
+  .diploma-ornament.top-right { top: -0.75rem; right: 0.5rem; transform: rotate(45deg) scaleX(-1); }
+  .diploma-ornament.bottom-left { bottom: 0.5rem; left: 0.5rem; transform: rotate(45deg); }
+  .diploma-ornament.bottom-right { bottom: 0.5rem; right: 0.5rem; transform: rotate(-45deg) scaleX(-1); }
 
-  .diploma-header-section {
-    margin-bottom: 1.5rem;
+  /* Left column */
+  .diploma-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
   }
 
   .diploma-icon {
-    font-size: 3.5rem;
-    margin-bottom: 0.5rem;
+    font-size: 4rem;
     filter: drop-shadow(0 4px 8px rgba(245, 158, 11, 0.3));
+  }
+
+  .diploma-seal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.125rem;
+  }
+
+  .seal-emoji {
+    font-size: 2rem;
+    filter: drop-shadow(0 2px 4px rgba(245, 158, 11, 0.4));
+  }
+
+  .seal-text {
+    font-family: var(--mqa-font-mono, 'IBM Plex Mono', monospace);
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: #f59e0b;
+    letter-spacing: 0.15em;
+  }
+
+  /* Center column */
+  .diploma-center {
+    text-align: center;
+    padding: 0 1rem;
   }
 
   .diploma h2 {
     font-family: var(--mqa-font-display, 'Space Grotesk', sans-serif);
-    font-size: 1.5rem;
+    font-size: 1.35rem;
     font-weight: 700;
     color: #f0f2f5;
     margin: 0;
@@ -787,18 +827,15 @@
   }
 
   .diploma-divider {
-    margin-top: 1rem;
+    margin: 0.5rem 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 1rem;
+    gap: 0.5rem;
   }
 
-  .diploma-divider::before,
-  .diploma-divider::after {
-    content: '';
-    flex: 1;
-    max-width: 100px;
+  .divider-line {
+    width: 80px;
     height: 1px;
     background: linear-gradient(90deg, transparent, #f59e0b, transparent);
   }
@@ -808,30 +845,27 @@
     font-size: 0.875rem;
   }
 
-  .diploma-body {
-    margin: 1.5rem 0;
-  }
-
   .diploma-subtitle {
     color: #8891a5;
-    font-size: 0.875rem;
-    margin: 0 0 0.5rem 0;
+    font-size: 0.85rem;
+    margin: 0.25rem 0;
     font-style: italic;
   }
 
   .diploma-name {
     font-family: var(--mqa-font-display, 'Space Grotesk', sans-serif);
-    font-size: 2rem;
+    font-size: 1.85rem;
     font-weight: 700;
     color: #f59e0b;
-    margin: 0.5rem 0;
+    margin: 0.25rem 0;
     text-shadow: 0 2px 10px rgba(245, 158, 11, 0.3);
+    line-height: 1.2;
   }
 
   .diploma-text {
     color: #b4bcd0;
-    font-size: 0.875rem;
-    margin: 1rem 0 0.25rem 0;
+    font-size: 0.8rem;
+    margin: 0.5rem 0 0.125rem 0;
   }
 
   .diploma-subject {
@@ -842,72 +876,54 @@
     margin: 0;
   }
 
-  .diploma-score-section {
-    margin-top: 1.5rem;
+  /* Right column */
+  .diploma-right {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.5rem;
   }
 
   .score-badge {
     display: inline-flex;
     align-items: baseline;
-    padding: 0.5rem 1.5rem;
+    padding: 0.375rem 1.25rem;
     background: rgba(245, 158, 11, 0.15);
     border: 2px solid #f59e0b;
-    border-radius: 30px;
+    border-radius: 24px;
   }
 
   .score-badge .score-number {
     font-family: var(--mqa-font-mono, 'IBM Plex Mono', monospace);
-    font-size: 2.5rem;
+    font-size: 2.25rem;
     font-weight: 700;
     color: #f0f2f5;
   }
 
   .score-badge .score-total {
     font-family: var(--mqa-font-mono, 'IBM Plex Mono', monospace);
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     color: #8891a5;
   }
 
   .diploma-grade {
     font-family: var(--mqa-font-display, 'Space Grotesk', sans-serif);
-    font-size: 1.1rem;
+    font-size: 0.95rem;
     font-weight: 600;
-    padding: 0.5rem 1.25rem;
+    padding: 0.5rem 1rem;
     background: #21252e;
-    border-radius: 20px;
+    border-radius: 18px;
     border: 1px solid #323846;
+    text-align: center;
+    line-height: 1.3;
   }
 
-  .diploma-footer {
-    margin-top: 2rem;
+  .diploma-meta {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.75rem;
-  }
-
-  .diploma-seal {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.25rem;
-  }
-
-  .seal-emoji {
-    font-size: 2rem;
-    filter: drop-shadow(0 2px 4px rgba(245, 158, 11, 0.4));
-  }
-
-  .seal-text {
-    font-family: var(--mqa-font-mono, 'IBM Plex Mono', monospace);
-    font-size: 0.625rem;
-    font-weight: 600;
-    color: #f59e0b;
-    letter-spacing: 0.2em;
+    gap: 0.125rem;
+    margin-top: 0.25rem;
   }
 
   .diploma-date {
@@ -943,29 +959,34 @@
     display: flex;
     gap: 0.75rem;
     justify-content: center;
-    align-items: stretch;
+    align-items: center;
     flex-wrap: wrap;
   }
 
   .share-btn {
-    padding: 0.875rem 1.5rem;
+    margin: 0 !important;
+    margin-top: 0 !important;
+    padding: 0 1rem;
     border-radius: 8px;
-    height: 52px;
+    height: 42px;
+    border: 2px solid transparent;
     box-sizing: border-box;
     font-family: var(--mqa-font-sans, 'Instrument Sans', sans-serif);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 500;
+    line-height: 1;
     cursor: pointer;
     transition: all 0.2s ease;
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
+    justify-content: center;
+    gap: 0.4rem;
+    white-space: nowrap;
   }
 
   .share-btn.download {
     background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
     color: #0a0b0d;
-    border: 1px solid transparent;
   }
 
   .share-btn.download:hover {
@@ -976,7 +997,7 @@
   .share-btn.twitter {
     background: #000;
     color: #fff;
-    border: 1px solid #333;
+    border-color: #333;
   }
 
   .share-btn.twitter:hover {
@@ -986,7 +1007,6 @@
   .share-btn.linkedin {
     background: #0077b5;
     color: #fff;
-    border: 1px solid transparent;
   }
 
   .share-btn.linkedin:hover {
@@ -1091,20 +1111,17 @@
       font-size: 1.5rem;
     }
 
-    .diploma-content {
-      padding: 2rem 1.5rem;
+    /* On mobile, keep the diploma at a fixed social-media-friendly width and allow horizontal scrolling */
+    .diploma-wrapper {
+      margin-left: -1rem;
+      margin-right: -1rem;
+      padding: 0 1rem;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
-    .diploma h2 {
-      font-size: 1.25rem;
-    }
-
-    .diploma-name {
-      font-size: 1.5rem;
-    }
-
-    .score-badge .score-number {
-      font-size: 2rem;
+    .diploma {
+      min-width: 650px;
     }
 
     .tf-options {
