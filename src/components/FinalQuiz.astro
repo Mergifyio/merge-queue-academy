@@ -44,7 +44,7 @@
       <!-- Question 1: True/False -->
       <div class="question-card" data-q="0">
         <div class="q-type">🎯 True or False</div>
-        <h3>A merge queue tests your PR against the <em>current</em> state of main.</h3>
+        <h3>A merge queue tests your PR against <em>only</em> the tip of main, ignoring other queued PRs.</h3>
         <div class="options tf-options">
           <button class="option-btn" data-correct="false" type="button">
             ✅ True
@@ -107,7 +107,7 @@
       <!-- Question 4: Scenario -->
       <div class="question-card" data-q="3" style="display: none">
         <div class="q-type">🎬 Scenario Time</div>
-        <h3>Your CI takes 30 minutes. You merge 20 PRs per day. Without batching, what's the queue's theoretical max throughput?</h3>
+        <h3>Your CI takes 30 minutes. With a basic queue (no batching, no speculative checks), what's the max throughput?</h3>
         <div class="options">
           <button class="option-btn" data-correct="false" type="button">
             🐌 16 PRs/day
@@ -123,7 +123,7 @@
           </button>
         </div>
         <div class="explanation" style="display: none">
-          <strong>48 PRs/day!</strong> 24 hours × 60 minutes ÷ 30 minutes = 48. Your 20 PRs/day fits, but there's not much headroom. Batching or parallel queues would help! 🚶
+          <strong>48 PRs/day!</strong> 24 hours × 60 minutes ÷ 30 minutes = 48. Sequential processing means one PR at a time. Speculative checks or batching would increase this! 🚶
         </div>
       </div>
 
