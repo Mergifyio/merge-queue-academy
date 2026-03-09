@@ -24,7 +24,7 @@ When the main branch fails tests or doesn't build. Blocks all development, deplo
 ## Features
 
 ### Speculative Checks
-Testing multiple PRs in parallel by assuming earlier PRs will pass. If PR #1 is testing, PR #2 starts testing against "main + PR #1" immediately. Reduces latency by 3x or more. See [Speculative Merging](/features/speculative-merging/).
+Testing multiple PRs in parallel by assuming earlier PRs will pass. If PR #1 is testing, PR #2 starts testing against "main + PR #1" immediately. Reduces latency by 3x or more. See [Speculative Checks](/features/speculative-merging/).
 
 ### Speculation Depth
 How many PRs ahead the queue will speculatively test. Depth of 3 means PR #4 waits for PR #1 to finish before starting. Balances parallelism against wasted CI when speculations fail.
