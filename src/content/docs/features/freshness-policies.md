@@ -52,9 +52,32 @@ flowchart LR
 | Monorepo with scopes | Within scope |
 | Medium velocity | Within 2-3 commits |
 
-## Combining with Other Features
+## Strict Freshness Under Load
 
-Freshness policies work well with:
-- **[Parallel Queues](/features/parallel-queues/)** - per-scope freshness
-- **[Speculative Checks](/features/speculative-merging/)** - reduce re-testing
-- **[Batching](/features/batching/)** - merge multiple PRs atomically
+Consider a team merging 30 PRs per day with a 15-minute CI pipeline.
+
+With strict freshness, every merge invalidates all in-flight tests. If 3 PRs are testing and one merges, the other 2 must restart. During peak hours, PRs can cycle through 3-4 restarts before finally merging — turning a 15-minute pipeline into a 60-minute wait.
+
+The math is unforgiving:
+
+| PRs in queue | Avg restarts per PR (strict) | Effective merge time |
+|---|---|---|
+| 2 | 0.5 | ~22 min |
+| 5 | 1.5 | ~37 min |
+| 10 | 3+ | ~60+ min |
+
+Relaxing freshness to "within 2 commits" eliminates most restarts while maintaining strong safety guarantees. The probability of a semantic conflict between two unrelated PRs is typically well under 1%.
+
+## Per-Scope Freshness
+
+When using [parallel queues](/features/parallel-queues/), freshness can be applied per scope. A frontend PR only needs to be fresh relative to other frontend changes — a backend merge doesn't invalidate it.
+
+This is the most powerful freshness optimization for monorepos. It combines the safety of strict freshness within each domain with the throughput of relaxed policies across domains.
+
+## Related Features
+
+- **[Parallel Queues](/features/parallel-queues/)** — per-scope freshness for monorepos
+- **[Speculative Checks](/features/speculative-merging/)** — reduce the impact of restarts from freshness invalidation
+- **[Batching](/features/batching/)** — atomic batch merges count as a single freshness event
+
+See also: [High-Velocity Teams](/use-cases/high-velocity-teams/) for guidance on choosing freshness policies at scale.

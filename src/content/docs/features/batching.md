@@ -47,6 +47,27 @@ Batch [1,2,3,4] fails
   → Put PR #4 back in queue
 ```
 
+## In Practice
+
+Consider a team merging 20 PRs per day with a 30-minute CI pipeline:
+
+- **Without batching:** 20 CI runs × 30 min = 10 hours of CI time
+- **With batches of 4:** 5 CI runs × 30 min = 2.5 hours of CI time
+
+That's a 75% reduction in CI resource usage. For teams paying for CI by the minute, this directly reduces infrastructure costs.
+
+The trade-off appears when a batch fails. If batch [1,2,3,4] fails, bisection adds 1-2 extra CI runs to isolate the culprit. But with a healthy codebase (failure rate under 5%), the savings far outweigh the occasional bisection cost.
+
+## Choosing Your Batch Size
+
+The right batch size depends on your failure rate and CI duration:
+
+- **Low failure rate (<2%)** — larger batches (5-10 PRs) work well since bisection is rare
+- **Medium failure rate (2-5%)** — moderate batches (3-5 PRs) balance efficiency and recovery time
+- **High failure rate (>5%)** — small batches (2-3 PRs), or invest in fixing your flaky tests first
+
+A useful rule of thumb: if bisection happens more than once per day, your batch size is too large or your test stability needs work.
+
 ## Configuration Options
 
 | Setting | Description |
@@ -76,3 +97,9 @@ A queue might test batch [1-3] while speculatively testing batch [4-6], achievin
 - One failure affects the whole batch
 - Bisection adds latency when failures occur
 - May need larger CI runners for combined changes
+
+## Related Features
+
+- **[Speculative Checks](/features/speculative-merging/)** — test batches in parallel for maximum throughput
+- **[Two-Step CI](/features/two-step-ci/)** — ensure PRs pass lightweight checks before entering a batch
+- **[Priority Management](/features/priority-management/)** — urgent PRs can bypass batch waiting
