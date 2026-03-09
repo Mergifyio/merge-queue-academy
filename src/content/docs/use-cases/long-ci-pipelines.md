@@ -85,8 +85,21 @@ Your queue strategy isn't working if:
 
 Monitor and adjust.
 
+## Strategy 3: Speculative Checks
+
+[Speculative checks](/features/speculative-merging/) test multiple PRs (or batches) in parallel, assuming earlier ones will pass. Combined with batching, this is the most effective way to maximize throughput with slow CI:
+
+```
+Without optimization: 5 PRs × 60 min = 300 min
+With batching + speculation: 2 batches × 60 min in parallel = 60 min
+```
+
 ## Key Takeaways
 
 1. **Two-step CI is essential** — Fast PR feedback, thorough queue validation
 2. **Batching reduces cost** — Fewer CI runs for same PRs
-3. **Monitor queue health** — Wait time is your key metric
+3. **Speculative checks reduce latency** — Test in parallel instead of waiting
+4. **[Priority lanes](/features/priority-management/)** — Ensure hotfixes don't wait behind long-running batches
+5. **Monitor queue health** — Wait time is your key metric
+
+See also: [High-Velocity Teams](/use-cases/high-velocity-teams/) for strategies beyond CI optimization.

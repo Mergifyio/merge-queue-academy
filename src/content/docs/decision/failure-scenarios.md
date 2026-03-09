@@ -270,3 +270,10 @@ The queue catches the conflict **before** it breaks main. Alice's changes land. 
 | Cycle can repeat | Problem is contained |
 
 The cost of a broken main is not the time to fix it—it's the compound disruption across your team. A merge queue eliminates this class of problem.
+
+## Next Steps
+
+- [What is a Merge Queue?](/introduction/what-is-a-merge-queue/) — Understand the solution in depth
+- [Prerequisites](/decision/prerequisites/) — What to fix before adopting one
+- [Making the Case](/decision/making-the-case/) — How to convince your team or leadership
+- [Companies Using Merge Queues](/introduction/companies-using-merge-queues/) — See who's already solved this problem
