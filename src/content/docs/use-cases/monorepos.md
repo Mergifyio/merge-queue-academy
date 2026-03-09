@@ -185,3 +185,6 @@ Document queue ownership clearly. Review quarterly.
 3. **Start simple, evolve** — Begin with directories, add sophistication as needed
 4. **Shared code is the hard part** — Have a clear strategy before it becomes a bottleneck
 5. **Optimize CI per queue** — Don't run everything for every PR
+6. **Use [freshness policies](/features/freshness-policies/)** — Per-scope freshness avoids unnecessary re-testing across unrelated queues
+
+See also: [Companies Using Merge Queues](/introduction/companies-using-merge-queues/) for how Uber, Shopify, and others handle monorepos at scale.

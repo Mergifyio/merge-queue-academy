@@ -310,4 +310,8 @@ A merge queue works by:
 
 This ensures that every commit on main has been tested against the exact state it will merge into — eliminating the "two green PRs make a red main" problem.
 
-Next, explore [whether you need a merge queue](/decision/failure-scenarios/) or dive into specific [features](/features/two-step-ci/).
+## Next Steps
+
+- [Do You Need One?](/decision/failure-scenarios/) — See the real cost of not having a merge queue
+- [Companies Using Merge Queues](/introduction/companies-using-merge-queues/) — How Uber, Shopify, and GitHub implement these mechanics
+- **Feature deep-dives:** [Two-Step CI](/features/two-step-ci/) · [Batching](/features/batching/) · [Speculative Checks](/features/speculative-merging/) · [Parallel Queues](/features/parallel-queues/) · [Priority Management](/features/priority-management/) · [Freshness Policies](/features/freshness-policies/)

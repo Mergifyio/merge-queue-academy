@@ -13,7 +13,7 @@ Uber built **SubmitQueue**, a custom merge queue for their massive monorepos.
 
 **The problem:** Before SubmitQueue, Uber's mainlines would often break due to developers racing to commit changes. On the worst days, 10% of commits had to be reverted, resulting in hours of lost developer time. Their iOS mainline was green only 52% of the time.
 
-**The solution:** SubmitQueue validates changes before merging using speculative builds. It employs machine learning to predict change success and optimize build scheduling.
+**The solution:** SubmitQueue validates changes before merging using [speculative builds](/features/speculative-merging/). It employs machine learning to predict change success and optimize build scheduling.
 
 **Results:**
 - Main branch success rate jumped to **99%**
@@ -28,7 +28,7 @@ Shopify integrated a merge queue into **Shipit**, their open-source deployment t
 
 **Scale:** Shopify's core monolith has over 2.8 million lines of Ruby code and 500,000 commits. They merge ~400 commits to master daily across 40+ deployments. Over 1,000 developers contribute to their codebase.
 
-**How it works:** Instead of merging directly to master, developers add PRs to the merge queue with a `/shipit` comment. The queue merges on their behalf after validating against a "predictive branch."
+**How it works:** Instead of merging directly to master, developers add PRs to the merge queue with a `/shipit` comment. The queue merges on their behalf after validating against a "predictive branch" — an approach similar to [two-step CI](/features/two-step-ci/).
 
 **Results:** Over 90% of pull requests to Shopify's core application use Shipit with the merge queue, making it the largest contributor to their monolith.
 
@@ -94,7 +94,7 @@ Back Market switched to Mergify after outgrowing their homegrown solution.
 
 **The problem:** With ~300 engineers, their internal merge queue couldn't keep up. CI checks took 25 minutes per PR, creating a hard limit on daily merges. During peak hours, engineers waited **4-5 hours** to merge. Their goal was 150 PRs/day—they were nowhere close.
 
-**The solution:** Mergify's merge queue with speculative checks. No manual merging—developers create PRs and label them, Mergify handles rebasing, testing, and merging automatically.
+**The solution:** Mergify's merge queue with [speculative checks](/features/speculative-merging/). No manual merging—developers create PRs and label them, Mergify handles rebasing, testing, and merging automatically.
 
 **Results:** Eliminated the bottleneck. Linear git history with fast-forward merges, fully automated workflow.
 
@@ -106,12 +106,12 @@ Looking across these implementations:
 
 | Company | Scale | Key Feature |
 |---------|-------|-------------|
-| Uber | Thousands of merges/day | ML-powered speculation |
-| Shopify | 400 commits/day | Integrated with deployment |
-| GitHub | 2,500 PRs/month | Dogfooding their product |
-| Google | 100,000+ commits/day | Two-pointer green main |
+| Uber | Thousands of merges/day | [Speculative checks](/features/speculative-merging/) |
+| Shopify | 400 commits/day | [Two-step CI](/features/two-step-ci/) |
+| GitHub | 2,500 PRs/month | [High-velocity workflow](/use-cases/high-velocity-teams/) |
+| Google | 100,000+ commits/day | [Freshness policies](/features/freshness-policies/) |
 | Strava | 3,100 PRs/year | Slack-triggered queue |
-| Back Market | 150 PRs/day target | Switched from homegrown to Mergify |
+| Back Market | 150 PRs/day target | [Speculative checks](/features/speculative-merging/) |
 | Rust | Open source | Origin of the concept |
 
 **What they share:**
@@ -128,3 +128,10 @@ For the full story: [The Origin Story of Merge Queues](https://mergify.com/blog/
 ## The Takeaway
 
 These companies built merge queues out of necessity. At scale, the cost of a broken main branch—blocked developers, constant reverts, deployment delays—exceeds the cost of implementing proper serialization. The pattern emerged independently at multiple organizations facing the same fundamental problem.
+
+## Explore Further
+
+- [What is a Merge Queue?](/introduction/what-is-a-merge-queue/) — Understand the core concept behind these implementations
+- [Do You Need One?](/decision/failure-scenarios/) — Find out if your team is facing the same problems
+- [Monorepos](/use-cases/monorepos/) — How parallel queues solve the monorepo challenge
+- [High-Velocity Teams](/use-cases/high-velocity-teams/) — Strategies for scaling to 100+ PRs/day

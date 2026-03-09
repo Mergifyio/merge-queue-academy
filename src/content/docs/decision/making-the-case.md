@@ -40,7 +40,7 @@ Different stakeholders care about different things.
 **Lead with:**
 - "Main breakages are preventable incidents"
 - "As we scale, coordination costs grow quadratically without automation"
-- "Teams at our scale (Google, Shopify, Uber) treat this as infrastructure"
+- "Teams at our scale ([Google, Shopify, Uber](/introduction/companies-using-merge-queues/)) treat this as infrastructure"
 
 **Frame it as:** Scaling investment + incident prevention
 

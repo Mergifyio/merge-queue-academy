@@ -109,13 +109,15 @@ If you don't have merge conflicts, broken main, or very long CI, this overhead b
 
 Skip the merge queue now, but revisit when:
 
-- Team grows past 20 engineers
+- Team grows past 20 engineers — see [High-Velocity Teams](/use-cases/high-velocity-teams/)
 - Merge volume exceeds 10 PRs/day
-- CI slows down past 15-20 minutes
+- CI slows down past 15-20 minutes — see [Long CI Pipelines](/use-cases/long-ci-pipelines/)
 - Main starts breaking regularly
 - Developers start complaining about rebase loops
 
 The signals in [What Happens Without a Merge Queue?](/decision/failure-scenarios/) will tell you when it's time.
+
+Ready to evaluate? Check the [Prerequisites](/decision/prerequisites/) or learn how to [make the case](/decision/making-the-case/) to your team.
 
 ---
 
