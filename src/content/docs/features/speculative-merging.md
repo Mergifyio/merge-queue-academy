@@ -71,6 +71,27 @@ You can limit how far ahead the queue speculates:
 
 Higher depth = more parallelism but more wasted CI if early PRs fail.
 
+## Choosing Your Depth
+
+The right speculation depth depends on two factors: your queue failure rate and your CI resource budget.
+
+**Low failure rate (<2%):** Use unlimited or high depth. Speculations almost always succeed, so you get maximum parallelism with minimal waste.
+
+**Medium failure rate (2-5%):** Depth of 3-5 works well. You get significant speedup while limiting cascade failures to a manageable scope.
+
+**High failure rate (>5%):** Keep depth at 2-3, and invest in stabilizing your test suite first. High failure rates cause frequent cascade restarts that can actually make the queue *slower* than sequential processing.
+
+A useful metric to track: **speculation hit rate** — the percentage of speculative runs that don't need to restart. If your hit rate drops below 80%, consider reducing depth or fixing test stability.
+
+## Cascade Failures
+
+When speculation fails, the impact depends on *which* PR fails:
+
+- **PR #1 fails** → PRs #2, #3, #4 all restart (tested against a state that will never exist)
+- **PR #3 fails** → PRs #1 and #2 merge normally, only PR #4 restarts
+
+A failure early in the queue causes more wasted work than a failure late in the queue. This is why most merge queues run a [lightweight PR CI check](/features/two-step-ci/) before PRs even enter the queue — catching obvious failures early reduces costly cascade restarts.
+
 ## Combining with Batching
 
 Speculative checks and [batching](/features/batching/) work well together:
@@ -84,6 +105,12 @@ Example: speculatively test batch [1-3] and batch [4-6] in parallel. You get the
 
 ## Best For
 
-- Teams with high PR volume
+- Teams with high PR volume — see [High-Velocity Teams](/use-cases/high-velocity-teams/)
 - Codebases with low failure rates in the queue
-- When CI resources are not a constraint
+- When CI resources are not a constraint — see [Long CI Pipelines](/use-cases/long-ci-pipelines/) for constrained environments
+
+## Related Features
+
+- **[Batching](/features/batching/)** — combine with speculation for maximum throughput
+- **[Two-Step CI](/features/two-step-ci/)** — pre-validate PRs to improve speculation hit rate
+- **[Priority Management](/features/priority-management/)** — high-priority PRs speculate from the front of the queue
