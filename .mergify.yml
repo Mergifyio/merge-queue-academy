@@ -9,8 +9,6 @@ merge_protections:
 
 queue_rules:
   - name: default
-    autoqueue: true
-    autoqueue: true
     commit_message_template: |
       {{ title }} (#{{ number }})
 
@@ -19,3 +17,4 @@ queue_rules:
 
 merge_protections_settings:
   reporting_method: deployments
+  auto_merge: true
