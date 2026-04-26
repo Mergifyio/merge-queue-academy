@@ -3,6 +3,11 @@ title: How Merge Queues Work
 description: The mechanics and lifecycle of a PR in a merge queue.
 sidebar:
   order: 2
+head:
+  - tag: link
+    attrs:
+      rel: canonical
+      href: https://mergify.com/learn/merge-queue/
 ---
 
 This page explains the internal mechanics of a merge queue — how PRs flow through it, how test branches are created, and how the queue coordinates with your CI system.

@@ -3,6 +3,11 @@ title: What is a Merge Queue?
 description: How merge queues keep your main branch stable while teams ship fast.
 sidebar:
   order: 1
+head:
+  - tag: link
+    attrs:
+      rel: canonical
+      href: https://mergify.com/learn/merge-queue/
 ---
 
 A merge queue sits between "PR approved" and "PR merged." It validates changes before they land on main.

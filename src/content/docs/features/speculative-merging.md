@@ -3,6 +3,11 @@ title: Speculative Checks
 description: Parallelize testing by assuming earlier PRs will pass.
 sidebar:
   order: 3
+head:
+  - tag: link
+    attrs:
+      rel: canonical
+      href: https://mergify.com/learn/merge-queue/speculative-merging/
 ---
 
 Instead of waiting for each PR to complete, the queue can **test multiple PRs in parallel by assuming earlier PRs will pass**.
