@@ -3,6 +3,11 @@ title: Parallel Queues
 description: Independent queues for non-conflicting changes.
 sidebar:
   order: 4
+head:
+  - tag: link
+    attrs:
+      rel: canonical
+      href: https://mergify.com/learn/merge-queue/parallel-queues/
 ---
 
 Not all changes conflict with each other. A frontend CSS change and a backend API change can often be tested and merged independently. **Parallel queues** (sometimes called "partitions" or "scopes") allow this:

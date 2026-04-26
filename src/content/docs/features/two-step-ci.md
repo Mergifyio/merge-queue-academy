@@ -3,6 +3,11 @@ title: Two-Step CI
 description: Separate PR validation from queue validation for safer merges.
 sidebar:
   order: 1
+head:
+  - tag: link
+    attrs:
+      rel: canonical
+      href: https://mergify.com/learn/merge-queue/two-step-ci/
 ---
 
 Most teams already run CI on pull requests. A merge queue adds a **second validation step** that runs when the PR enters the queue:
