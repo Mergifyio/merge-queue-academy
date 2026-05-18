@@ -7,7 +7,7 @@ head:
   - tag: link
     attrs:
       rel: canonical
-      href: https://mergify.com/learn/merge-queue/
+      href: https://mergify.com/learn/merge-queue
 ---
 
 A merge queue sits between "PR approved" and "PR merged." It validates changes before they land on main.

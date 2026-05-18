@@ -7,7 +7,7 @@ head:
   - tag: link
     attrs:
       rel: canonical
-      href: https://mergify.com/learn/merge-queue/batching/
+      href: https://mergify.com/learn/merge-queue/batching
 ---
 
 Testing each PR individually means one CI run per PR. With 10 PRs, that's 10 CI runs. Batching groups multiple PRs into a single CI run, dramatically cutting CI cost and resource usage.

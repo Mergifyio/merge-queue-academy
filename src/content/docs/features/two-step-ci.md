@@ -7,7 +7,7 @@ head:
   - tag: link
     attrs:
       rel: canonical
-      href: https://mergify.com/learn/merge-queue/two-step-ci/
+      href: https://mergify.com/learn/merge-queue/two-step-ci
 ---
 
 Most teams already run CI on pull requests. A merge queue adds a **second validation step** that runs when the PR enters the queue:
