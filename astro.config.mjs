@@ -163,6 +163,10 @@ export default defineConfig({
 					autogenerate: { directory: 'use-cases' },
 				},
 				{
+					label: 'Best Practices',
+					autogenerate: { directory: 'best-practices' },
+				},
+				{
 					label: 'Glossary',
 					link: '/glossary/',
 				},
