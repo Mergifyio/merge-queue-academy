@@ -1,1 +1,6 @@
-Drop the stale 'npm run build was not run' review note: CI ran the build job on this PR and it passed (run 31187740653, 41s). Also dropped the stacked 'Measuring a Merge Queue' commit, which now has its own PR based on main (#117) so CI can build it too.
+Revision history for #115:
+
+rev 2 (rebase) 2026-08-07 15:08 UTC — Drop the stale 'npm run build was not run' review note: CI ran the build job on this PR and it passed (run 31187740653, 41s). Also dropped the stacked 'Measuring a Merge Queue' commit, which now has its own PR based on main (#117) so CI can build it too.
+rev 1 (initial) 2026-08-07 15:08 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":115,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"139ed1c35967116f9bfea2ffe8f31fec855bb002","timestamp_iso":"2026-08-07T15:08:56Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"rebase","old_sha":"139ed1c35967116f9bfea2ffe8f31fec855bb002","new_sha":"4365a4d92739b4ffa2fc4cedf0f2b79822214c3e","timestamp_iso":"2026-08-07T15:08:56Z","reason":"Drop the stale 'npm run build was not run' review note: CI ran the build job on this PR and it passed (run 31187740653, 41s). Also dropped the stacked 'Measuring a Merge Queue' commit, which now has its own PR based on main (#117) so CI can build it too.","replay_sha":null,"compare_url":"https://github.com/Mergifyio/merge-queue-academy/compare/139ed1c35967116f9bfea2ffe8f31fec855bb002...4365a4d92739b4ffa2fc4cedf0f2b79822214c3e"}]} -->
