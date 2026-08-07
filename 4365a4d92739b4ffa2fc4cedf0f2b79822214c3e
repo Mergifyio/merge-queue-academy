@@ -1,0 +1,1 @@
+Drop the stale 'npm run build was not run' review note: CI ran the build job on this PR and it passed (run 31187740653, 41s). Also dropped the stacked 'Measuring a Merge Queue' commit, which now has its own PR based on main (#117) so CI can build it too.
