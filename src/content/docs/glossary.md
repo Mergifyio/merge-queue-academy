@@ -10,6 +10,9 @@ Quick reference for merge queue terminology.
 ### Merge Queue
 A system that validates and serializes PR merges, testing each PR against its actual merge target before integration. Prevents broken main by ensuring every commit is tested against what main will look like when it lands.
 
+### Merge Train
+GitLab's name for a merge queue. Each merge request on the train gets a merged results pipeline testing it against the target branch plus every merge request ahead of it. See [Merge Queues vs Merge Trains](/introduction/merge-queues-vs-merge-trains/).
+
 ### Test Branch
 Temporary branch created by the merge queue representing "what main will look like after this PR merges." PRs are rebased onto this branch and tested there—not against the current main.
 
