@@ -1,1 +1,6 @@
-rebased onto a new commit below it that pins actions to SHAs: the repo requires it and CI could not start without it
+Revision history for #137:
+
+rev 2 (content) 2026-09-28 15:33 UTC — rebased onto a new commit below it that pins actions to SHAs: the repo requires it and CI could not start without it
+rev 1 (initial) 2026-09-28 15:33 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":137,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"5661223178271cc92029e43f9f4297942a2b5e31","timestamp_iso":"2026-09-28T15:33:59Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"5661223178271cc92029e43f9f4297942a2b5e31","new_sha":"e2495b74faa3c98401df76cdbe8353c573087913","timestamp_iso":"2026-09-28T15:33:59Z","reason":"rebased onto a new commit below it that pins actions to SHAs: the repo requires it and CI could not start without it","replay_sha":"b4b46b7adea3b463783b9294660765f030796eaf","compare_url":"https://github.com/Mergifyio/merge-queue-academy/compare/5661223178271cc92029e43f9f4297942a2b5e31...b4b46b7adea3b463783b9294660765f030796eaf"}]} -->
