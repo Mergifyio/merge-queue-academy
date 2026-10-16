@@ -9,10 +9,11 @@ merge_protections:
 
 queue_rules:
   - name: default
-    commit_message_template: |
-      {{ title }} (#{{ number }})
-
-      {{ body }}
+    commit_message_format:
+      title: pr-title
+      body: pr-body
+      trailers:
+        - approved-by
     merge_method: squash
 
 merge_protections_settings:
