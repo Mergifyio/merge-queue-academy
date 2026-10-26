@@ -1,1 +1,6 @@
-replace the og:type head entry instead of mutating it: Starlight shares config head objects across pages, so mutation would leak og:type article onto the homepage and final quiz
+Revision history for #159:
+
+rev 2 (content) 2026-10-26 09:26 UTC — replace the og:type head entry instead of mutating it: Starlight shares config head objects across pages, so mutation would leak og:type article onto the homepage and final quiz
+rev 1 (initial) 2026-10-26 09:26 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":159,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"8da84db99aebba14298c96b401fcca20b5cd4fd7","timestamp_iso":"2026-10-26T09:26:45Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"8da84db99aebba14298c96b401fcca20b5cd4fd7","new_sha":"a14361fc6d86707b2db4906113220afb343bba30","timestamp_iso":"2026-10-26T09:26:45Z","reason":"replace the og:type head entry instead of mutating it: Starlight shares config head objects across pages, so mutation would leak og:type article onto the homepage and final quiz","replay_sha":null,"compare_url":"https://github.com/Mergifyio/merge-queue-academy/compare/8da84db99aebba14298c96b401fcca20b5cd4fd7...a14361fc6d86707b2db4906113220afb343bba30"}]} -->
