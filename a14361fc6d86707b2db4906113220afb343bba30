@@ -1,0 +1,1 @@
+replace the og:type head entry instead of mutating it: Starlight shares config head objects across pages, so mutation would leak og:type article onto the homepage and final quiz
