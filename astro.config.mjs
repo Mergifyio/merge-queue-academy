@@ -1,11 +1,34 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import sitemap from '@astrojs/sitemap';
 import rehypeMermaid from 'rehype-mermaid';
+import { readdirSync, readFileSync } from 'node:fs';
+
+const SITE = 'https://merge-queue.academy';
+const DOCS_DIR = new URL('./src/content/docs/', import.meta.url);
+
+// Pages whose frontmatter canonical points off-site (the overlap pages that
+// canonical to mergify.com/learn/merge-queue). They stay live but must not be
+// listed in our sitemap: a sitemap should only carry canonical URLs.
+const offsiteCanonicals = new Set(
+	readdirSync(DOCS_DIR, { recursive: true })
+		.map(String)
+		.filter((file) => /\.mdx?$/.test(file))
+		.filter((file) => {
+			const frontmatter = readFileSync(new URL(file, DOCS_DIR), 'utf8').split(/^---$/m)[1] ?? '';
+			const canonical = frontmatter.match(/rel:\s*canonical\s*\n\s*href:\s*(\S+)/);
+			return canonical && !canonical[1].startsWith(SITE);
+		})
+		.map((file) => {
+			const slug = file.replace(/\\/g, '/').replace(/\.mdx?$/, '').replace(/(^|\/)index$/, '');
+			return slug ? `${SITE}/${slug}/` : `${SITE}/`;
+		}),
+);
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://merge-queue.academy',
+	site: SITE,
 	markdown: {
 		rehypePlugins: [
 			[
@@ -92,9 +115,13 @@ export default defineConfig({
 		],
 	},
 	integrations: [
+		// Starlight only adds its own sitemap when none is configured, so this
+		// one replaces it.
+		sitemap({ filter: (page) => !offsiteCanonicals.has(page) }),
 		starlight({
 			title: 'Merge Queue Academy',
 			social: [],
+			routeMiddleware: './src/routeData.ts',
 			components: {
 				Header: './src/components/Header.astro',
 				Footer: './src/components/Footer.astro',
