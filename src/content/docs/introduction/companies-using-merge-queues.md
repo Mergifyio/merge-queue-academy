@@ -60,7 +60,7 @@ Google operates at a scale that required inventing their own approach.
 
 Developers can pull from either pointer. Many default to "last green," treating the gap between pointers as an optimistic-but-unverified queue. Changes pass pretests before merging, then a continuous verification system validates the trunk.
 
-Source: [Not Rocket Science: How Bors and Google's TAP inspired modern merge queues](https://graphite.com/blog/bors-google-tap-merge-queue)
+Source: [Not Rocket Science: How Bors and Google's TAP inspired modern merge queues](https://web.archive.org/web/20261025095956/https://graphite.com/blog/bors-google-tap-merge-queue) (Graphite blog, archived copy)
 
 ## Rust
 
