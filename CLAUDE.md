@@ -24,6 +24,10 @@ This is an Astro documentation site using the Starlight theme.
 - **Styling**: Custom theme in `src/styles/custom-theme.css`, mermaid styles in `src/styles/mermaid.css`.
 - **Assets**: Images go in `src/assets/` (for processed images) or `public/` (for static assets like favicons).
 
+## Comments and docstrings
+
+Default to none. A comment says, in one line, a why the code cannot; a docstring states intent in one sentence. Longer rationale goes in the commit message. Never narrate the code, paraphrase a name, or record an incident, ticket or customer.
+
 ## Content Structure
 
 ```
